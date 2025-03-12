@@ -488,7 +488,7 @@ leaves_types_ouput = is_chip_flags(G, Type.PIN_OUTPUT)
 # led_nodes = [node for node, data in G.nodes(data=True) if data.type == Type.PIN_INPUT and data.position == "e7"]
 
 #print(f"Nœuds de Type.INPUT : {led_nodes}")
-
+ 
 reachable_nodes = nx.node_connected_component(G, n)
 leaves = find_graph_leaves(G)
 leaves_without_vcc_gnd = [lv for lv in leaves if lv.type not in [Type.VCC, Type.GND, Type.PIN_GND, Type.PIN_VCC]]
