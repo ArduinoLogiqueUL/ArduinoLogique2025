@@ -41,8 +41,9 @@ def draw_square_hole( canvas,x_distance, y_distance, scale=1, width=-1, **kwargs
             y_distance,
             fill=light_color,
             outline=light_color,
+            tags = "",
         )
-        canvas.create_rectangle(
+        item_id = canvas.create_rectangle(
             x_distance + space // 3,
             y_distance + space // 3,
             x_distance + 2 * space // 3,
@@ -52,7 +53,7 @@ def draw_square_hole( canvas,x_distance, y_distance, scale=1, width=-1, **kwargs
         )
 
 
-        return (x_distance, y_distance)
+        return ((x_distance, y_distance),(item_id, ))
 
 def rounded_rect( canvas, x: int, y: int, width: int, height: int, radius: int,outline: int, fill: int,  thickness: int, **kwargs) -> None:
     """

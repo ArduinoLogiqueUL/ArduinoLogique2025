@@ -1,5 +1,6 @@
 import tkinter as tk
 import component_AL as comp
+import Devices as dev
 
 
 
@@ -12,27 +13,32 @@ win.configure(bg="#330000")  # Setting consistent background color
 
 canvas = tk.Canvas(win, width=1500, height=800, background="#333333")
 canvas.pack()
-
+cursor = dev.Mouse_cursor(win = win, canvas=canvas,file_name="Images/zoom-in.png")
 #ws = comp.grid()
 #ws.set_canvas(canvas)
 comp.workshop.set_canvas(canvas)
-bredboard = comp.Board()
-bredboard.draw(3,3)
+board_model = [(comp.Board,{"origin_x":10,"origin_y":3})]
+[bredboard] = comp.workshop.add(board_model)
+line_hole_model = [(comp.Line_of_hole,{"origin_x":1,"origin_y":1,"direction":0})]
+bredboard.add(line_hole_model)
+comp.workshop.draw()
+# bredboard = comp.Board()
+# bredboard.draw(x_pos = 3, y_pos =3)
 
-h = comp.Hole()
-h.draw(4,4,scale=1)
-h.draw(4,5,scale=1)
+# h = comp.Hole()
+# h.draw(x_pos =4,y_pos =4,scale=1)
+# h.draw(x_pos =4,y_pos =5,scale=1)
 
-lhh = comp.Line_of_hole(5,direction=0)
-lhh.draw(4,7)
+# lhh = comp.Line_of_hole(5,direction=0)
+# lhh.draw(x_pos =4,y_pos =7)
 
-ls = comp.Line_of_separator(50)
-ls.draw(4,8)
+# ls = comp.Line_of_separator(50)
+# ls.draw(x_pos =4,y_pos =8)
 
-r=comp.Rail(50,15)
-r.draw(4,10)
+# r=comp.Rail(50,15)
+# r.draw(x_pos =4,y_pos =10)
 
-r=comp.Rail(5,15) 
-r.draw(4,13,scale=5)
+# r=comp.Rail(5,15) 
+# r.draw(x_pos =4,y_pos =13,scale=5)
 
 win.mainloop()
