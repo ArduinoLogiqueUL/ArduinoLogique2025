@@ -129,30 +129,30 @@ def add_nodes_circuit(graph  :nx.Graph): # entre tous les noeuds du circuit
                       (n27,n28), (n22,n23),(n24,n25), (n26,n27), (n29,n32), (n30,n33),(n31,n34), (n35,n36),(n26, n35),
                       (n37,n38),(n39, n40), (n32,n37),(n38, n39)])
     # (n7,n8) #d15 et e15
-   
-    n = Noeud(type_= Type.PIN_INPUT, position = "e10")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_INPUT, position = "e11")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_OUTPUT, position = "e12", func = "NAND")
-    G.add_node(n,type=n.type)
-    # n = Noeud(type_= Type.PIN_GND, position = "e13")
+################# ajouts de noeuds ############################################   
+    # n = Noeud(type_= Type.PIN_INPUT, position = "e10")
     # G.add_node(n,type=n.type)
-    # n = Noeud.Noeud(type_= Noeud.Type.PIN_VCC, position = "f7")
-    n = Noeud(type_= Type.PIN_INPUT, position = "e7")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_INPUT, position = "f8")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_INPUT, position = "f9")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_OUTPUT, position = "f10", func = "NAND")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_INPUT, position = "f11")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_INPUT, position = "f12")
-    G.add_node(n,type=n.type)
-    n = Noeud(type_= Type.PIN_OUTPUT, position = "f13", func = "NAND")
-    G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_INPUT, position = "e11")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_OUTPUT, position = "e12", func = "NAND")
+    # G.add_node(n,type=n.type)
+    # # n = Noeud(type_= Type.PIN_GND, position = "e13")
+    # # G.add_node(n,type=n.type)
+    # # n = Noeud.Noeud(type_= Noeud.Type.PIN_VCC, position = "f7")
+    # n = Noeud(type_= Type.PIN_INPUT, position = "e7")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_INPUT, position = "f8")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_INPUT, position = "f9")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_OUTPUT, position = "f10", func = "NAND")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_INPUT, position = "f11")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_INPUT, position = "f12")
+    # G.add_node(n,type=n.type)
+    # n = Noeud(type_= Type.PIN_OUTPUT, position = "f13", func = "NAND")
+    # G.add_node(n,type=n.type)
 
 # Fonction pour trouver un nœud de type VCC
 # def trouver_noeud_type(graph, type_recherche):
@@ -385,7 +385,15 @@ def is_chip_flags(graph: nx.Graph, type_recherche, **kargs):
     ## associer deux pin_input avec un pin_output
     ## 
     return leaves_types
+def trouver_noeud_position(graph: nx.Graph,position_recherche, **kargs):
+    positions_voulues = [position_recherche] + list(kargs.values())
+    noeuds_position_trouves = [noeud for noeud in G.nodes if noeud.position in positions_voulues]
+    return noeuds_position_trouves
 
+def trouver_noeud_position_without_hole(graph: nx.Graph,position_recherche, **kargs):
+    positions_voulues = [position_recherche] + list(kargs.values())
+    noeuds_position_trouves = [noeud for noeud in G.nodes if noeud.position in positions_voulues]
+    return noeuds_position_trouves
 
 # Création du graphe de noeuds 
 G = nx.Graph()
@@ -483,13 +491,28 @@ leaves_types_ouput = is_chip_flags(G, Type.PIN_OUTPUT)
 #############################################################
 ############# CONNECTION ###################################
 #n29 = Noeud(type_= Type.PIN_INPUT, position = "e7", func = "NAND_1")
+positions_voulues = trouver_noeud_position(G,'e7')
 
-# Rechercher les nœuds de type "LED"
-# led_nodes = [node for node, data in G.nodes(data=True) if data.type == Type.PIN_INPUT and data.position == "e7"]
+if positions_voulues:
+    print("La position recherchee: {positions_voulues[0]}")
+    reachable_nodes = nx.node_connected_component(G, positions_voulues[0])
+    ## liste de comprehension en supprimant le Type.Hole et le Type.position recherche
+    ## reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, positions_voulues[0].type]]
+    reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_INPUT]]
+    
+    ## appeler les differentes fonctions de validation des flags
+    ## definir c'est quoi une bonne connection
+    ## reachable_nodes_without_Type_Hole_Type_recherche = sorted(reachable_nodes_without_Type_Hole_Type_recherche)
+    ## TypeError: '<' not supported between instances of 'Noeud' and 'Noeud'
+    ## reachable_nodes_without_Type_Hole_Type_recherche = set(reachable_nodes_without_Type_Hole_Type_recherche)
+    ## print(Counter(reachable_nodes_without_Type_Hole_Type_recherche) == Counter([]))
+    
+    
+    ## liste vide alors 0 connection 
+    ## liste avec Type.flag_input ou 
+else:
+    print("La position recherchee est absente de la liste: {positions_voulues[0]}")
 
-#print(f"Nœuds de Type.INPUT : {led_nodes}")
- 
-reachable_nodes = nx.node_connected_component(G, n)
 leaves = find_graph_leaves(G)
 leaves_without_vcc_gnd = [lv for lv in leaves if lv.type not in [Type.VCC, Type.GND, Type.PIN_GND, Type.PIN_VCC]]
 
