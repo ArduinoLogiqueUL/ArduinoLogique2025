@@ -120,6 +120,8 @@ def add_nodes_circuit(graph  :nx.Graph): # entre tous les noeuds du circuit
     G.add_node(n39,type=n39.type)
     n40 = Noeud(type_= Type.VCC, position = "p3") # chaque fonction nand_1 est etiqueter puis executer de la meme facon
     G.add_node(n40,type=n40.type)
+    # n40 = Noeud(type_= Type.HOLE, position = "j3") # chaque fonction nand_1 est etiqueter puis executer de la meme facon
+    # G.add_node(n40,type=n40.type)
 
 
 ################### FIN  TESTS FLAGS (e7 input: fonc=NAND_1, e8 input: fonc=NAND_1, e9 output: fonc=NAND_1) (d7 flag input, d8 flag input, d9 flag output) ######################
@@ -394,8 +396,14 @@ def trouver_noeud_position_without_hole(graph: nx.Graph,position_recherche, **ka
     positions_voulues = [position_recherche] + list(kargs.values())
     noeuds_position_trouves = [noeud for noeud in G.nodes if noeud.position in positions_voulues]
     return noeuds_position_trouves
-
-# Création du graphe de noeuds 
+###  Function BFLG
+#### 8) Positionner un drapeau IN sur OUT -> BFLG // 
+#### 9) Positionner un drapeau OUT sur IN -> BFLG //
+###  Prend en parametres une listes 
+def pin_input_BFLG(pin_input_recherche, noeuds_connectes):## liste de un element chacun
+    result = all(nc.type == Type.FLAG_INPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    return result
+# Création du graphe de noeuds  
 G = nx.Graph()
 print(type(G))
 add_nodes_circuit(G)
@@ -499,7 +507,7 @@ if positions_voulues:
     ## liste de comprehension en supprimant le Type.Hole et le Type.position recherche
     ## reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, positions_voulues[0].type]]
     reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_INPUT]]
-    
+    input_BFLG = pin_input_BFLG(positions_voulues, reachable_nodes_without_Type_Hole_Type_recherche)
     ## appeler les differentes fonctions de validation des flags
     ## definir c'est quoi une bonne connection
     ## reachable_nodes_without_Type_Hole_Type_recherche = sorted(reachable_nodes_without_Type_Hole_Type_recherche)
@@ -507,9 +515,18 @@ if positions_voulues:
     ## reachable_nodes_without_Type_Hole_Type_recherche = set(reachable_nodes_without_Type_Hole_Type_recherche)
     ## print(Counter(reachable_nodes_without_Type_Hole_Type_recherche) == Counter([]))
     
-    
     ## liste vide alors 0 connection 
     ## liste avec Type.flag_input ou 
+
+    #### 4) Brancher 2 pin Out ensemble -> CC ou MBPIN // mauvais branchement de pin(broche de puce)  2 pin out marchent pas
+    #### 5) Brancher le vcc ou le gnd sur pin Out -> CC ou MBPIN //pin ne prend pas un vcc ou gnd
+    #### 8) Positionner un drapeau IN sur OUT -> BFLG // 
+    #### 9) Positionner un drapeau OUT sur IN -> BFLG //
+
+
+
+
+
 else:
     print("La position recherchee est absente de la liste: {positions_voulues[0]}")
 
