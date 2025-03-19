@@ -399,10 +399,34 @@ def trouver_noeud_position_without_hole(graph: nx.Graph,position_recherche, **ka
 ###  Function BFLG
 #### 8) Positionner un drapeau IN sur OUT -> BFLG // 
 #### 9) Positionner un drapeau OUT sur IN -> BFLG //
+#### 10) Mal positionner le drapeau CLK -> BFLG // 
+
 ###  Prend en parametres une listes 
 def pin_input_BFLG(pin_input_recherche, noeuds_connectes):## liste de un element chacun
     result = all(nc.type == Type.FLAG_INPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
     return result
+
+###  Prend en parametres un tableau, un indice ie entree sur le tableau et noeuds_connectes 
+def is_pin_connected(tab, indice, noeuds_connectes):## liste de un element chacun
+    tab[indice]=True if (len(noeuds_connectes)>0) else False ## retourne un booleen 
+    return tab[indice]
+
+###  Prend en parametres un tableau, 3 indices 
+### retourne vrai ou faux 
+def is_all_pin_function_connected(tab, indice_1, indice_2, indice_3):## liste de un element chacun
+    return tab[indice_1] and tab[indice_2] and tab[indice_3]
+
+### Function BFLG OUTPUT 
+## 9) Positionner un drapeau OUT sur IN -> BFLG //
+
+def pin_output_BFLG(pin_output_recherche, noeuds_connectes):## liste de un element chacun
+    result = all(nc.type == Type.FLAG_OUTPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    return result
+## 10) Mal positionner le drapeau CLK -> BFLG // 
+def pin_clock_BFLG(pin_output_recherche, noeuds_connectes):## liste de un element chacun
+    result = all(nc.type == Type.FLAG_CLOCK for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    return result
+
 # Création du graphe de noeuds  
 G = nx.Graph()
 print(type(G))
@@ -500,14 +524,30 @@ leaves_types_ouput = is_chip_flags(G, Type.PIN_OUTPUT)
 ############# CONNECTION ###################################
 #n29 = Noeud(type_= Type.PIN_INPUT, position = "e7", func = "NAND_1")
 positions_voulues = trouver_noeud_position(G,'e7')
+## Declarer un tableau de bouleen 
+## Le passer en parametre à la fonction
+## la fonction utilise le numero de la broche comme indice 
+## pour retrouver l'etat de la broche qui est traite
+## puis tester l'etat de des 2 entres et une sortie
+tab_etat_input_bool = [False] * 12
 
 if positions_voulues:
     print("La position recherchee: {positions_voulues[0]}")
     reachable_nodes = nx.node_connected_component(G, positions_voulues[0])
     ## liste de comprehension en supprimant le Type.Hole et le Type.position recherche
     ## reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, positions_voulues[0].type]]
-    reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_INPUT]]
-    input_BFLG = pin_input_BFLG(positions_voulues, reachable_nodes_without_Type_Hole_Type_recherche)
+    reachable_nodes_input_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_INPUT]]    
+    input_BFLG = pin_input_BFLG(positions_voulues, reachable_nodes_input_without_Type_Hole_Type_recherche)
+    
+    reachable_nodes_out_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_OUTPUT]]
+    output_BFLG = pin_output_BFLG(positions_voulues, reachable_nodes_out_without_Type_Hole_Type_recherche)
+    
+    reachable_nodes_clock_out_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_CLOCK]]
+    clock_BFLG = pin_clock_BFLG(positions_voulues, reachable_nodes_clock_out_without_Type_Hole_Type_recherche)
+    indice = 0
+    bool_is_pin_connected =is_pin_connected(tab_etat_input_bool, indice, reachable_nodes_input_without_Type_Hole_Type_recherche)## liste de un element chacun
+    
+    bool_is_all_pin_function_connected = is_all_pin_function_connected(tab_etat_input_bool, 0,1,2)
     ## appeler les differentes fonctions de validation des flags
     ## definir c'est quoi une bonne connection
     ## reachable_nodes_without_Type_Hole_Type_recherche = sorted(reachable_nodes_without_Type_Hole_Type_recherche)

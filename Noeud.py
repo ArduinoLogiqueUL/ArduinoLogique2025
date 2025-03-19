@@ -9,6 +9,7 @@ class Type(Enum):
     PIN_GND     = auto()
     PIN_INPUT   = auto()
     PIN_OUTPUT  = auto()
+    PIN_CLOCK  = auto()
     FLAG_INPUT  = auto()
     (FLAG_OUTPUT) = auto()
     FLAG_CLOCK  = auto()
