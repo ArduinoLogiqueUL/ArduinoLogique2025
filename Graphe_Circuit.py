@@ -403,9 +403,12 @@ def trouver_noeud_position_without_hole(graph: nx.Graph,position_recherche, **ka
 
 ###  Prend en parametres une listes 
 def pin_input_BFLG(pin_input_recherche, noeuds_connectes):## liste de un element chacun
-    result = all(nc.type == Type.FLAG_INPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
-    return result
-
+    # result_1 = all(nc.type == Type.FLAG_INPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    # result_2 = all(nc.type == Type.FLAG_INPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    # return result_1 or result_2
+    ## une sortie peut etre conncetee a une netrée et reciproquement
+    ## la comparaison tient compte de l'ordre sinon il faut trier 
+    return not((noeuds_connectes == [Type.FLAG_INPUT]) or (noeuds_connectes == [Type.FLAG_OUTPUT]))
 ###  Prend en parametres un tableau, un indice ie entree sur le tableau et noeuds_connectes 
 def is_pin_connected(tab, indice, noeuds_connectes):## liste de un element chacun
     tab[indice]=True if (len(noeuds_connectes)>0) else False ## retourne un booleen 
@@ -420,12 +423,17 @@ def is_all_pin_function_connected(tab, indice_1, indice_2, indice_3):## liste de
 ## 9) Positionner un drapeau OUT sur IN -> BFLG //
 
 def pin_output_BFLG(pin_output_recherche, noeuds_connectes):## liste de un element chacun
-    result = all(nc.type == Type.FLAG_OUTPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
-    return result
+    # result = all(nc.type == Type.FLAG_OUTPUT for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    # return result
+    ## une sortie peut etre conncetee a une netrée et reciproquement
+    ## la comparaison tient compte de l'ordre sinon il faut trier 
+    return not(noeuds_connectes == [Type.FLAG_OUTPUT])
+
 ## 10) Mal positionner le drapeau CLK -> BFLG // 
 def pin_clock_BFLG(pin_output_recherche, noeuds_connectes):## liste de un element chacun
     result = all(nc.type == Type.FLAG_CLOCK for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
-    return result
+    return not result
+
 
 # Création du graphe de noeuds  
 G = nx.Graph()
@@ -523,31 +531,70 @@ leaves_types_ouput = is_chip_flags(G, Type.PIN_OUTPUT)
 #############################################################
 ############# CONNECTION ###################################
 #n29 = Noeud(type_= Type.PIN_INPUT, position = "e7", func = "NAND_1")
+tab_etat_input_bool = [False] * 12
 positions_voulues = trouver_noeud_position(G,'e7')
 ## Declarer un tableau de bouleen 
 ## Le passer en parametre à la fonction
 ## la fonction utilise le numero de la broche comme indice 
 ## pour retrouver l'etat de la broche qui est traite
 ## puis tester l'etat de des 2 entres et une sortie
-tab_etat_input_bool = [False] * 12
 
-if positions_voulues:
+indice_0 = 0
+position_valide_1: bool = len(positions_voulues) == 1
+
+if position_valide_1:
     print("La position recherchee: {positions_voulues[0]}")
     reachable_nodes = nx.node_connected_component(G, positions_voulues[0])
     ## liste de comprehension en supprimant le Type.Hole et le Type.position recherche
     ## reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, positions_voulues[0].type]]
     reachable_nodes_input_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_INPUT]]    
-    input_BFLG = pin_input_BFLG(positions_voulues, reachable_nodes_input_without_Type_Hole_Type_recherche)
-    
+    input_BFLG_1 = pin_input_BFLG(positions_voulues, reachable_nodes_input_without_Type_Hole_Type_recherche)
+    bool_is_pin_connected_2 = is_pin_connected(tab_etat_input_bool, indice_0, reachable_nodes_input_without_Type_Hole_Type_recherche)## liste de un element chacun
+
+else:
+    print("La position recherchee est dupliquée ou est absente de la liste: {positions_voulues[0]}")
+
+#### 2eme pin
+positions_voulues = trouver_noeud_position(G,'e8')
+indice_1 = 1
+position_valide_2: bool = len(positions_voulues) == 1
+if position_valide_2:
+    print("La position recherchee: {positions_voulues[0]}")
+    reachable_nodes = nx.node_connected_component(G, positions_voulues[0])
+    ## liste de comprehension en supprimant le Type.Hole et le Type.position recherche
+    ## reachable_nodes_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, positions_voulues[0].type]]
+    reachable_nodes_input_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_INPUT]]    
+    input_BFLG_2 = pin_input_BFLG(positions_voulues, reachable_nodes_input_without_Type_Hole_Type_recherche)
+    bool_is_pin_connected_2 =is_pin_connected(tab_etat_input_bool, indice_1, reachable_nodes_input_without_Type_Hole_Type_recherche)## liste de un element chacun
+else:
+    print("La position recherchee est dupliquée ou est absente de la liste: {positions_voulues[0]}")
+#### 3eme pin 
+positions_voulues = trouver_noeud_position(G,'e9')
+indice_2 = 2
+position_valide_3: bool = len(positions_voulues) == 1
+if position_valide_3:
+    reachable_nodes = nx.node_connected_component(G, positions_voulues[0])
     reachable_nodes_out_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_OUTPUT]]
-    output_BFLG = pin_output_BFLG(positions_voulues, reachable_nodes_out_without_Type_Hole_Type_recherche)
+    output_BFLG_3 = pin_output_BFLG(positions_voulues, reachable_nodes_out_without_Type_Hole_Type_recherche)
+    bool_is_pin_connected_3 = is_pin_connected(tab_etat_input_bool, indice_2, reachable_nodes_out_without_Type_Hole_Type_recherche)## liste de un element chacun
+
+else:
+    print("La position recherchee est dupliquée ou est absente de la liste: {positions_voulues[0]} ou ")
+
+
+if position_valide_1 and position_valide_2 and position_valide_3:
+    bool_is_all_pin_function_connected = is_all_pin_function_connected(tab_etat_input_bool, indice_0,indice_1,indice_2)
+
+#### Branchement clock 
+##########################
+####     CLOCK   #########
+##########################
+
+    # reachable_nodes_clock_out_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_CLOCK]]
+    # clock_BFLG = pin_clock_BFLG(positions_voulues, reachable_nodes_clock_out_without_Type_Hole_Type_recherche)
     
-    reachable_nodes_clock_out_without_Type_Hole_Type_recherche = [noeud for noeud in reachable_nodes if noeud.type not in [Type.HOLE, Type.PIN_CLOCK]]
-    clock_BFLG = pin_clock_BFLG(positions_voulues, reachable_nodes_clock_out_without_Type_Hole_Type_recherche)
-    indice = 0
-    bool_is_pin_connected =is_pin_connected(tab_etat_input_bool, indice, reachable_nodes_input_without_Type_Hole_Type_recherche)## liste de un element chacun
+    # bool_is_pin_connected =is_pin_connected(tab_etat_input_bool, indice, reachable_nodes_input_without_Type_Hole_Type_recherche)## liste de un element chacun
     
-    bool_is_all_pin_function_connected = is_all_pin_function_connected(tab_etat_input_bool, 0,1,2)
     ## appeler les differentes fonctions de validation des flags
     ## definir c'est quoi une bonne connection
     ## reachable_nodes_without_Type_Hole_Type_recherche = sorted(reachable_nodes_without_Type_Hole_Type_recherche)
@@ -564,11 +611,6 @@ if positions_voulues:
     #### 9) Positionner un drapeau OUT sur IN -> BFLG //
 
 
-
-
-
-else:
-    print("La position recherchee est absente de la liste: {positions_voulues[0]}")
 
 leaves = find_graph_leaves(G)
 leaves_without_vcc_gnd = [lv for lv in leaves if lv.type not in [Type.VCC, Type.GND, Type.PIN_GND, Type.PIN_VCC]]
