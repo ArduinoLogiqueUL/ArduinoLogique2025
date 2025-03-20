@@ -1,4 +1,18 @@
 import tkinter as tk
+import pygame
+from pygame.locals import *
+import pygame.gfxdraw
+
+canvas : pygame.Surface = None
+
+def init_gfx(width : int = None, height :int  = None, titre : str = "Arduino Logique"):
+     global canvas
+     #pygame.init()
+     print(f"(moules ok, modules ko) = {pygame.init()}")
+     if not width or not height:
+            canvas = pygame.display.set_mode()
+     else:  canvas = pygame.display.set_mode((width, height))
+     pygame.display.set_caption(titre)
 
 def draw_line_separator(canvas,x_distance, y_distance, x2, y2, scale=1, width=-1, **kwargs):
     space = kwargs.get("space", 9) * scale
@@ -76,42 +90,47 @@ def rounded_rect( canvas, x: int, y: int, width: int, height: int, radius: int,o
     x2 = x + width
     y2 = y + height
     points = [
-        x + radius,
-        y,
-        x2 - radius,
-        y,
-        x2,
-        y + radius,
-        x2,
-        y2 - radius,
-        x2 - radius,
-        y2,
-        x + radius,
-        y2,
-        x,
-        y2 - radius,
-        x,
-        y + radius,
+        (x + radius,
+        y),
+        (x2 - radius,
+        y),
+        (x2,
+        y + radius),
+        (x2,
+        y2 - radius),
+        (x2 - radius,
+        y2),
+        (x + radius,
+        y2),
+        (x,
+        y2 - radius),
+        (x,
+        y + radius),
     ]
     #tag = kwargs.get("tags", "")
     #fill = kwargs.get("fill", "")
     thickness = kwargs.get("thickness", 1)
-
+    
     # Draw four arcs for corners
-    canvas.create_arc(x, y, x + 2 * radius, y + 2 * radius, start=90, extent=90, style=tk.PIESLICE, **kwargs)
-    canvas.create_arc(x2 - 2 * radius, y, x2, y + 2 * radius, start=0, extent=90, style=tk.PIESLICE, **kwargs)
-    canvas.create_arc(
-        x2 - 2 * radius, y2 - 2 * radius, x2, y2, start=270, extent=90, style=tk.PIESLICE, **kwargs
-    )
-    canvas.create_arc(
-        x, y2 - 2 * radius, x + 2 * radius, y2, start=180, extent=90, style=tk.PIESLICE, **kwargs
-    )
+    #canvas.create_arc(x, y, x + 2 * radius, y + 2 * radius, start=90, extent=90, style=tk.PIESLICE, **kwargs)
+    pygame.gfxdraw.filled_circle(canvas,x + radius,y2 -  radius,radius,fill)
+#    canvas.create_arc(x2 - 2 * radius, y, x2, y + 2 * radius, start=0, extent=90, style=tk.PIESLICE, **kwargs)
+    pygame.gfxdraw.filled_circle(canvas,x2 -  radius, y2  - radius,radius,fill)
+    # canvas.create_arc(
+    #     x2 - 2 * radius, y2 - 2 * radius, x2, y2, start=270, extent=90, style=tk.PIESLICE, **kwargs
+    # )
+    pygame.gfxdraw.filled_circle(canvas, x2 -  radius, y + radius, radius,fill)
+    # canvas.create_arc(
+    #     x, y2 - 2 * radius, x + 2 * radius, y2, start=180, extent=90, style=tk.PIESLICE, **kwargs
+    # )
+    pygame.gfxdraw.filled_circle(canvas, x + radius, y + radius, radius, fill)
     # kwargs["outline"] = fill
-    canvas.create_polygon(points, smooth=False,fill=fill, **kwargs)
-    canvas.create_line(x + radius, y, x, y + radius, fill=fill, width=thickness)
-    canvas.create_line(x2 - radius, y, x2, y + radius, fill=fill, width=thickness)
-    canvas.create_line(x2 - radius, y2, x2, y2 - radius, fill=fill, width=thickness)
-    canvas.create_line(x, y2 - radius, x + radius, y2, fill=fill, width=thickness)
+    # canvas.create_polygon(points, smooth=False,fill=fill, **kwargs)
+    pygame.gfxdraw.filled_polygon(canvas,points,fill)
+    # canvas.create_line(x + radius, y, x, y + radius, fill=fill, width=thickness)
+    # canvas.create_line(x2 - radius, y, x2, y + radius, fill=fill, width=thickness)
+    # canvas.create_line(x2 - radius, y2, x2, y2 - radius, fill=fill, width=thickness)
+    # canvas.create_line(x, y2 - radius, x + radius, y2, fill=fill, width=thickness)
 
 
 def draw_board(canvas,x_distance, y_distance,h_board, w_board, scale=1, width=-1, **kwargs):
@@ -124,7 +143,7 @@ def draw_board(canvas,x_distance, y_distance,h_board, w_board, scale=1, width=-1
         #dim = BOARD_830_PTS_PARAMS.copy()
         #dim["dimLine"] = kwargs.get("dimLine", dim["dimLine"])
         #dim["dimColumn"] = kwargs.get("dimColumn", dim["dimColumn"])
-        color = kwargs.get("color", "#F5F5DC")
+        color = kwargs.get("color", (240,240,220))   #"#F5F5DC"
         #sep_alim = kwargs.get("sepAlim", dim["sepAlim"])
         #sep_distrib = kwargs.get("sepDistribution", dim["sepDistribution"])
         radius = kwargs.get("radius", 5)

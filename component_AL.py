@@ -113,6 +113,7 @@ class Board(Component):
         self.origin_y = y_pos 
         x, y = self.wh2xy(x_pos, y_pos)
         gfx.draw_board(self.workshop.canvas, x, y,self.h_board, self.w_board, scale)
+        gfx.pygame.display.flip()
 
 class Rail(Component):
     def __init__(self, width : int, heigth : int):
