@@ -13,16 +13,18 @@ def init_gfx(width : int = None, height :int  = None, titre : str = "Arduino Log
             canvas = pygame.display.set_mode()
      else:  canvas = pygame.display.set_mode((width, height))
      pygame.display.set_caption(titre)
+     canvas.fill((51, 51, 51))
 
 def draw_line_separator(canvas,x_distance, y_distance, x2, y2, scale=1, width=-1, **kwargs):
     space = kwargs.get("space", 9) * scale
     if width != -1:
         scale = width / space
         
-    color = kwargs.get("color", "#707070")
+    color = kwargs.get("color", (112, 112, 112))
     thickness =  kwargs.get("thickness", 1)
     thickness = 1 * scale
-    canvas.create_line(x_distance, y_distance,x2,y2, fill=color,width=thickness, **kwargs)
+    #canvas.create_line(x_distance, y_distance,x2,y2, fill=color,width=thickness, **kwargs)
+    pygame.gfxdraw.hline(canvas, x_distance,x2, y_distance, color)
       
 def draw_square_hole( canvas,x_distance, y_distance, scale=1, width=-1, **kwargs):
         """
@@ -34,40 +36,61 @@ def draw_square_hole( canvas,x_distance, y_distance, scale=1, width=-1, **kwargs
 
         #inter_space = 15 * scale
 
-        dark_color, light_color, hole_color = kwargs.get("colors", ["#c0c0c0", "#f6f6f6", "#484848"])
+        dark_color, light_color, hole_color = kwargs.get("colors", [(192, 192, 192), (246, 246, 246), (72, 72, 72)])
+        
+        points = [(x_distance,
+            y_distance + space),
+            (x_distance,
+            y_distance),
+            (x_distance + space,
+            y_distance)]
+        pygame.gfxdraw.filled_polygon(canvas,points,dark_color)
+        #pygame.gfxdraw.aapolygon(canvas,points,dark_color)
+        # canvas.create_polygon(
+        #     x_distance,
+        #     y_distance + space,
+        #     x_distance,
+        #     y_distance,
+        #     x_distance + space,
+        #     y_distance,
+        #     fill=dark_color,
+        #     outline=dark_color,
+        # )
+        points = [(x_distance,
+            y_distance + space),
+            (x_distance + space,
+            y_distance + space),
+            (x_distance + space,
+            y_distance)]
+        pygame.gfxdraw.filled_polygon(canvas,points,light_color)
+        # canvas.create_polygon(
+        #     x_distance,
+        #     y_distance + space,
+        #     x_distance + space,
+        #     y_distance + space,
+        #     x_distance + space,
+        #     y_distance,
+        #     fill=light_color,
+        #     outline=light_color,
+        #     tags = "",
+        # )
+        r = pygame.Rect(    x_distance + space // 3,
+                        y_distance + space // 3,
+                        space // 3,
+                        space // 3
+                    )
+        pygame.gfxdraw.box(canvas, r, hole_color)
+        # item_id = canvas.create_rectangle(
+        #     x_distance + space // 3,
+        #     y_distance + space // 3,
+        #     x_distance + 2 * space // 3,
+        #     y_distance + 2 * space // 3,
+        #     fill=hole_color,
+        #     outline=hole_color,
+        # )
 
-        canvas.create_polygon(
-            x_distance,
-            y_distance + space,
-            x_distance,
-            y_distance,
-            x_distance + space,
-            y_distance,
-            fill=dark_color,
-            outline=dark_color,
-        )
-        canvas.create_polygon(
-            x_distance,
-            y_distance + space,
-            x_distance + space,
-            y_distance + space,
-            x_distance + space,
-            y_distance,
-            fill=light_color,
-            outline=light_color,
-            tags = "",
-        )
-        item_id = canvas.create_rectangle(
-            x_distance + space // 3,
-            y_distance + space // 3,
-            x_distance + 2 * space // 3,
-            y_distance + 2 * space // 3,
-            fill=hole_color,
-            outline=hole_color,
-        )
 
-
-        return ((x_distance, y_distance),(item_id, ))
+        return ((x_distance, y_distance))
 
 def rounded_rect( canvas, x: int, y: int, width: int, height: int, radius: int,outline: int, fill: int,  thickness: int, **kwargs) -> None:
     """

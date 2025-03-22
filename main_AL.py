@@ -23,8 +23,8 @@ gfx.init_gfx()
 comp.workshop.set_canvas(gfx.canvas)
 board_model = [(comp.Board,{"origin_x":10,"origin_y":3})]
 [bredboard] = comp.workshop.add(board_model)
-#line_hole_model = [(comp.Line_of_hole,{"origin_x":1,"origin_y":1,"direction":0})]
-            # bredboard.add(line_hole_model)
+line_hole_model = [(comp.Line_of_hole,{"origin_x":1,"origin_y":1,"direction":0})]
+bredboard.add(line_hole_model)
 comp.workshop.draw()
 # bredboard = comp.Board()
 # bredboard.draw(x_pos = 3, y_pos =3)
@@ -46,6 +46,16 @@ comp.workshop.draw()
 # r.draw(x_pos =4,y_pos =13,scale=5)
 
 #win.mainloop()
+cursor_img = pygame.image.load("Images/zoom-out.png").convert_alpha()
+largeur, hauteur = cursor_img.get_size()
+destination_size = (64, 64)
+cursor_scaled = pygame.transform.scale(cursor_img, destination_size)
+pygame.mouse.set_visible(False)
+pos = pygame.mouse.get_pos()
+zone_rect = pygame.Rect(pos[0], pos[1], 64, 64)
+sous_surface = gfx.canvas.subsurface(zone_rect)
+copie_zone = sous_surface.copy()  
+old_pos = pos
 running : bool = True
 while running:
     theta = 0
@@ -54,4 +64,15 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             
+        if event.type == pygame.MOUSEMOTION:
+            pos = pygame.mouse.get_pos()
+            gfx.canvas.blit(copie_zone, (old_pos[0], old_pos[1]))
+            zone_rect = pygame.Rect(pos[0], pos[1], 64, 64)
+            sous_surface = gfx.canvas.subsurface(zone_rect)
+            copie_zone = sous_surface.copy()            
+            gfx.canvas.blit(cursor_scaled, pos)
+            old_pos = pos
+
+            
+    pygame.display.flip()            
 pygame.quit

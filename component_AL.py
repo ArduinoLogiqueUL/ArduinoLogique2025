@@ -100,6 +100,8 @@ class Line_of_separator(Component):
         x, y = self.wh2xy(x_pos, y_pos)
         w,_ = self.wh2xy(self.width, self.width)
         gfx.draw_line_separator(self.workshop.canvas, x, y, x + w, y,  scale)
+        super().draw(scale=scale, x_pos= x_pos, y_pos=y_pos, **kwargs)
+        gfx.pygame.display.flip()
             
 class Board(Component):
     def __init__(self, w_board=67, h_board=23, **kwargs):
@@ -113,6 +115,7 @@ class Board(Component):
         self.origin_y = y_pos 
         x, y = self.wh2xy(x_pos, y_pos)
         gfx.draw_board(self.workshop.canvas, x, y,self.h_board, self.w_board, scale)
+        super().draw(scale=scale, x_pos= x_pos, y_pos=y_pos, **kwargs)
         gfx.pygame.display.flip()
 
 class Rail(Component):
