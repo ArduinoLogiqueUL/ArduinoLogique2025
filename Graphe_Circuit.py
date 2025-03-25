@@ -408,7 +408,10 @@ def pin_input_BFLG(pin_input_recherche, noeuds_connectes):## liste de un element
     # return result_1 or result_2
     ## une sortie peut etre conncetee a une netrée et reciproquement
     ## la comparaison tient compte de l'ordre sinon il faut trier 
-    return not((noeuds_connectes == [Type.FLAG_INPUT]) or (noeuds_connectes == [Type.FLAG_OUTPUT]))
+    ## IMPOSSIBLE CAR FAUT DES ENTREES POUR AVOIR LA SORTIE
+    ## DONC PIN PREND UN SEUL SIGNAL C'EST LA FLAG D'ENTREE SINON CA MARCHE PAS DE PORTE NAND
+##    return not((noeuds_connectes == [Type.FLAG_INPUT]) or (noeuds_connectes == [Type.FLAG_OUTPUT]))
+    return not(noeuds_connectes == [Type.FLAG_INPUT])
 ###  Prend en parametres un tableau, un indice ie entree sur le tableau et noeuds_connectes 
 def is_pin_connected(tab, indice, noeuds_connectes):## liste de un element chacun
     tab[indice]=True if (len(noeuds_connectes)>0) else False ## retourne un booleen 
@@ -431,8 +434,9 @@ def pin_output_BFLG(pin_output_recherche, noeuds_connectes):## liste de un eleme
 
 ## 10) Mal positionner le drapeau CLK -> BFLG // 
 def pin_clock_BFLG(pin_output_recherche, noeuds_connectes):## liste de un element chacun
-    result = all(nc.type == Type.FLAG_CLOCK for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
-    return not result
+    # result = all(nc.type == Type.FLAG_CLOCK for nc in noeuds_connectes) and len(noeuds_connectes)==1## retourne un booleen 
+    # return not result
+    return not(noeuds_connectes == [Type.FLAG_CLOCK])
 
 
 # Création du graphe de noeuds  
