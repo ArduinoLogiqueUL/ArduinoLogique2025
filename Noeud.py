@@ -30,7 +30,6 @@ class Type(Enum):
     # VOID        = auto()
     # VOID        = auto()
     # VOID        = auto()
-    # VOID        = auto()
 
 class Noeud:
     _id : int = 0
@@ -46,7 +45,8 @@ class Noeud:
         self._func_id : int = func_id
 
     def __str__(self):
-        return f"user id : {self._id_user} \nposition: {self._position} \ntype : {self._type} \nfunc : {self._func} \n"
+        #return f"user id : {self._id_user} \nposition: {self._position} \ntype : {self._type} \nfunc : {self._func} \n"
+        return f"user id : {self._id_user}  position: {self._position}    type : {self._type}   func : {self._func}  "
     
     def __eq__(self, n):# eviter une mauvaise initialisation avec un mauvais type
         # return self.type == n.type
