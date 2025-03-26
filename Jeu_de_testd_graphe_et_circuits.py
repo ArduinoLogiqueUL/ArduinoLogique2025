@@ -28,6 +28,13 @@ edges_pin_vcc_gnd_Nopwr_MB = []   #  à remplir
 circuit_test_pin_in_et_pin_out = []  #  à remplir
 edges_pin_in_et_pin_out= []   #  à remplir
 
+circuit_test_flag_out_cc_mb = []  #  à remplir
+edges_flag_out_cc_mb= []   #  à remplir
+
+circuit_test_pin_clock = []  #  à remplir
+edges_pin_clock = []   #  à remplir
+
+
 def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
     noeuds : dict = {}
     G = nx.Graph()
@@ -85,6 +92,20 @@ def is_pin_in_ok(g : nx.Graph):
     
     return pin_in_cc, pin_out_cc, pin_in_mb, pin_out_mb, pin_out_co
 
+def is_flag_out_mb(g :nx.Graph):
+    flag_out_mb :list[list[Noeud]]= [] 
+    
+    # a compléter
+    
+    return flag_out_mb
+
+def is_pin_clock_ok(g :nx.Graph):
+    pin_clock_ko :list[list[Noeud]]= [] 
+    
+    # a compléter
+    
+    return pin_clock_ko
+
 
 g = creation_graphe(circuit_test_vcc_gnd_cc, edges_vcc_gnd)
 vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out = is_vcc_gnd_in_CC(g)
@@ -128,9 +149,8 @@ print(pin_in_cc)
 #                     [("e6", Type.PIN_IN), ("d6", Type.HOLE), ("d5", Type.HOLE)], ("e5", Type.PIN_OUT)], 
 # suite               [ ("e6", Type.PIN_IN), ("a6", Type.HOLE)], [("n6", Type.GND)]]
 
-print(pin_out_cc)
-# résultat attendu : [[("e8", Type.PIN_OUT), ("d8", Type.FLAG_OUTPUT)], 
-# suite               [("e8", Type.PIN_OUT), ("a8", Type.FLAG_OUTPUT)]]
+print(pin_in_cc)
+# résultat attendu :  [("e17", Type.PIN_OUT), ("a17", Type.HOLE), ("a20", Type.HOLE)], ("e20", Type.PIN_OUT)], 
 
 print(pin_in_mb)
 # résultat attendu : [[("e15", Type.PIN_IN), ("a15", Type.FLAG_OUTPUT)], 
@@ -144,3 +164,18 @@ print(pin_out_co)
 # suite               [("f6", Type.PIN_IN), ("f5", Type.PIN_IN)],
 # suite               ("f9", Type.PIN_OUT), ("f7", Type.PIN_IN)], 
 # suite               [("f9", Type.PIN_IN), ("f8", Type.PIN_IN)]]
+
+g = creation_graphe(circuit_test_flag_out_cc_mb, edges_flag_out_cc_mb)
+flag_out_mb = is_pin_in_ok(g)
+print(flag_out_mb)
+# résultat attendu : [[("f15", Type.PIN_VCC), ("h15", Type.FLAG_OUTPUT)], 
+# suite               [("e15", Type.PIN_IN), ("a15", Type.FLAG_OUTPUT)],
+#                     [("e21", Type.PIN_GND), ("a21", Type.FLAG_OUTPUT)], 
+# suite               [ ("h12", Type.PIN_IN)]]
+
+g = creation_graphe(circuit_test_flag_out_cc_mb, edges_flag_out_cc_mb)
+pin_clock_ko = is_pin_clock_ok(g)
+print(pin_clock_ko)
+# résultat attendu : [[("e12", Type.PIN_CLOCK), ("d12", Type.FLAG_CLOCK)], 
+# suite               [("e12", Type.PIN_CLOCK), ("a12", Type.FLAG_CLOCK)]]
+

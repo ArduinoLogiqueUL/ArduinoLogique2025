@@ -1,0 +1,240 @@
+{
+    "_battery": {},
+    "_battery_neg_wire": {
+        "start": [
+            1100,
+            326.2
+        ],
+        "end": [
+            1053,
+            279.2
+        ],
+        "color": [
+            0,
+            0,
+            0
+        ],
+        "terminal_type": "neg",
+        "endpoint_tag": "_battery_neg_wire_endpoint"
+    },
+    "_battery_pos_wire": {
+        "start": [
+            1100,
+            374.8
+        ],
+        "end": [
+            1053,
+            427.8
+        ],
+        "color": [
+            255,
+            0,
+            0
+        ],
+        "terminal_type": "pos",
+        "endpoint_tag": "_battery_pos_wire_endpoint"
+    },
+    "_chip_0": {
+        "XY": [
+            205.5,
+            161.5
+        ],
+        "pinUL_XY": [
+            207.5,
+            152.5
+        ],
+        "chipWidth": 2.4,
+        "pinCount": 16,
+        "label": "74HC109",
+        "type": "74HC109",
+        "btnMenu": [
+            1,
+            1,
+            0
+        ],
+        "symbScript": "JKFlipFlop",
+        "io": [
+            [
+                [
+                    2
+                ],
+                [
+                    6,
+                    7
+                ]
+            ],
+            [
+                [
+                    14
+                ],
+                [
+                    10,
+                    9
+                ]
+            ]
+        ],
+        "pwr": [
+            [
+                16,
+                "+"
+            ],
+            [
+                8,
+                "-"
+            ]
+        ],
+        "logicFunctionName": "JKFlipFlop",
+        "io_select": [],
+        "io_out_inv": [],
+        "io_enable": [],
+        "io_enable_inv": [],
+        "clock_pin": [
+            [
+                [
+                    0,
+                    4
+                ]
+            ],
+            [
+                [
+                    1,
+                    12
+                ]
+            ]
+        ],
+        "inv_reset_pin": [
+            [
+                [
+                    0,
+                    1
+                ]
+            ],
+            [
+                [
+                    1,
+                    15
+                ]
+            ]
+        ],
+        "inv_set_pin": [
+            [
+                [
+                    0,
+                    5
+                ]
+            ],
+            [
+                [
+                    1,
+                    11
+                ]
+            ]
+        ],
+        "inv_clock_pin": [],
+        "j_input_pin": [
+            [
+                [
+                    0,
+                    2
+                ]
+            ],
+            [
+                [
+                    1,
+                    14
+                ]
+            ]
+        ],
+        "inv_k_input_pin": [
+            [
+                [
+                    0,
+                    3
+                ]
+            ],
+            [
+                [
+                    1,
+                    13
+                ]
+            ]
+        ],
+        "k_input_pin": [
+            [],
+            []
+        ],
+        "count_enable_pin": [],
+        "inv_load_enable_pin": [],
+        "inv_up_down_input_pin": [],
+        "terminal_count_pin": [],
+        "occupied_holes": [
+            "10,7",
+            "10,8",
+            "11,7",
+            "11,8",
+            "12,7",
+            "12,8",
+            "13,7",
+            "13,8",
+            "14,7",
+            "14,8",
+            "15,7",
+            "15,8",
+            "16,7",
+            "16,8",
+            "17,7",
+            "17,8"
+        ]
+    },
+    "_io_0": {
+        "coord": [
+            [
+                12,
+                10
+            ]
+        ],
+        "XY": [
+            187.5,
+            217.5
+        ],
+        "controller_pin": "IO",
+        "type": 2,
+        "color": "#8df900",
+        "outline_tag": "pin_io_outline__io_0",
+        "tag": "pin_io__io_0"
+    },
+    "_io_1": {
+        "coord": [
+            [
+                12,
+                12
+            ]
+        ],
+        "XY": [
+            187.5,
+            247.5
+        ],
+        "controller_pin": "IO",
+        "type": 2,
+        "color": "#9437ff",
+        "outline_tag": "pin_io_outline__io_1",
+        "tag": "pin_io__io_1"
+    },
+    "_io_2": {
+        "coord": [
+            [
+                15,
+                5
+            ]
+        ],
+        "XY": [
+            232.5,
+            112.5
+        ],
+        "controller_pin": "IO",
+        "type": 2,
+        "color": "#9437ff",
+        "outline_tag": "pin_io_outline__io_2",
+        "tag": "pin_io__io_2"
+    }
+}
