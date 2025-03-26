@@ -25,6 +25,9 @@ edges_vcc_gnd = [(1,2), (2,3), (3,4), (4,5), (5,6), (7,8), (9,10), (10,45), (58,
 circuit_test_pin_vcc_gnd_Nopwr_MB = []  #  à remplir
 edges_pin_vcc_gnd_Nopwr_MB = []   #  à remplir
 
+circuit_test_pin_in_et_pin_out = []  #  à remplir
+edges_pin_in_et_pin_out= []   #  à remplir
+
 def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
     noeuds : dict = {}
     G = nx.Graph()
@@ -63,6 +66,25 @@ def is_vcc_gnd_in_no_pwr_or_MB(g : nx.Graph):
     
     return pin_vcc_gnd_no_pwr, pin_vcc_gnd_mb
 
+def is_pin_in_ok(g : nx.Graph):
+    pin_in_cc : list[list[Noeud]]= [] 
+    pin_out_cc :list[list[Noeud]]= [] 
+    pin_in_mb :list[list[Noeud]]= [] 
+    pin_out_mb :list[list[Noeud]]= [] 
+    pin_out_co :list[list[Noeud]]= [] 
+    
+    # à terminer avec ce principe:
+    # il y a CC si une pin_in est connecter à plus d'un de ces choix: PIN_OUT ou VCC ou GND ou FLAG_INPUT
+    # il y a CC si une pin_out est connecter à plus d'un de ces choix:  FLAG_OUTPUT
+    # il y a CC si une pin_in est connecter à un de ces choix: PIN_OUT ou VCC ou GND ou FLAG_INPUT
+    # il y a mauvais branchement mb si une pin_in est connectée à : FLAG_OUTPUT ou FLAG_CLOCK
+    # il y a mauvais branchement mb si une pin_out est connectée à : FLAG_INPUT ou FLAG_CLOCK
+    # il y a co si une pin_out a au moins une de ses entrées non connectée, si aucune entrée n'est connectée
+    # on a un état nc qui n'est pas bloquant. La propriété _nb_in contient le nombre d'entrées d'un pin_out
+    # Il y a aussi co si un pin_out n'est pas connecté et qu'il y a au moins une entrée active.
+    
+    return pin_in_cc, pin_out_cc, pin_in_mb, pin_out_mb, pin_out_co
+
 
 g = creation_graphe(circuit_test_vcc_gnd_cc, edges_vcc_gnd)
 vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out = is_vcc_gnd_in_CC(g)
@@ -98,3 +120,27 @@ print(pin_vcc_gnd_mb)
 #                     [("e38", Type.PIN_OUT), ("c38", Type.HOLE), ("c39", Type.HOLE)], ("e39", Type.PIN_GND)], 
 # suite               [ ("f45", Type.PIN_VCC), ("i45", Type.FLAG_CLOCK)], [("e51", Type.PIN_GND), ("b51", Type.FLAG_CLOCK)]]
 
+g = creation_graphe(circuit_test_pin_in_et_pin_out, edges_pin_in_et_pin_out)
+pin_in_cc, pin_out_cc, pin_in_mb, pin_out_mb, pin_out_co = is_pin_in_ok(g)
+print(pin_in_cc)
+# résultat attendu : [[("e3", Type.PIN_IN), ("d3", Type.FLAG_INPUT)], 
+# suite               [("e3", Type.PIN_IN), ("a3", Type.FLAG_INPUT)],
+#                     [("e6", Type.PIN_IN), ("d6", Type.HOLE), ("d5", Type.HOLE)], ("e5", Type.PIN_OUT)], 
+# suite               [ ("e6", Type.PIN_IN), ("a6", Type.HOLE)], [("n6", Type.GND)]]
+
+print(pin_out_cc)
+# résultat attendu : [[("e8", Type.PIN_OUT), ("d8", Type.FLAG_OUTPUT)], 
+# suite               [("e8", Type.PIN_OUT), ("a8", Type.FLAG_OUTPUT)]]
+
+print(pin_in_mb)
+# résultat attendu : [[("e15", Type.PIN_IN), ("a15", Type.FLAG_OUTPUT)], 
+# suite               [("f17", Type.PIN_IN), ("g17", Type.FLAG_CLOCK)]]
+
+print(pin_out_mb)
+# résultat attendu : [[("e17", Type.PIN_OUT), ("c17", Type.FLAG_INPUT)]]
+
+print(pin_out_co)
+# résultat attendu : [[("f6", Type.PIN_OUT), ("f4", Type.PIN_IN)], 
+# suite               [("f6", Type.PIN_IN), ("f5", Type.PIN_IN)],
+# suite               ("f9", Type.PIN_OUT), ("f7", Type.PIN_IN)], 
+# suite               [("f9", Type.PIN_IN), ("f8", Type.PIN_IN)]]
