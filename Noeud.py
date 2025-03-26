@@ -11,7 +11,7 @@ class Type(Enum):
     PIN_OUTPUT  = auto()
     PIN_CLOCK  = auto()
     FLAG_INPUT  = auto()
-    (FLAG_OUTPUT) = auto()
+    FLAG_OUTPUT = auto()
     FLAG_CLOCK  = auto()
     HOLE        = auto()
     # VOID        = auto()
