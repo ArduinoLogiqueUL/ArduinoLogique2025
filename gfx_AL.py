@@ -10,10 +10,37 @@ def init_gfx(width : int = None, height :int  = None, titre : str = "Arduino Log
      #pygame.init()
      print(f"(moules ok, modules ko) = {pygame.init()}")
      if not width or not height:
-            canvas = pygame.display.set_mode()
-     else:  canvas = pygame.display.set_mode((width, height))
+            info = pygame.display.Info()
+            width, height = info.current_w, info.current_h
+            height -= 100
+            #canvas = pygame.display.set_mode()
+     canvas = pygame.display.set_mode((width, height))
      pygame.display.set_caption(titre)
-     canvas.fill((51, 51, 51))
+     #canvas.fill((51, 51, 51))
+     canvas.fill((30, 30, 30))
+     
+def draw_menu(width : int = 40, height : int = None):
+     color_light = (200, 200, 200) 
+     color_dark =(100, 100, 100)
+     if height == None:
+          largeur, height = canvas.get_size()
+     zone = pygame.Rect(0, 0, width, height)
+     pygame.gfxdraw.box(canvas,zone,(60,60,60))
+     zone = pygame.Rect(0, 1, width, height)
+     pygame.gfxdraw.rectangle(canvas,zone, color_dark)
+     #pygame.gfxdraw.line(canvas,width, 0, width, height, color_dark)
+     #pygame.gfxdraw.line(canvas,0, height, width, height,color_dark )
+     delta = 3
+    #  for delta in range(1,delta):
+    #     color_light = ( 100 + delta*50, 100 + delta*50, 100 +  delta*50) 
+    #     zone = pygame.Rect(delta, delta, width - delta, height - delta)
+    #     pygame.gfxdraw.rectangle(canvas,zone, color_light)
+    #     #pygame.gfxdraw.line(canvas,width-delta, 0, width - delta, height- delta, color_light )
+    #     #pygame.gfxdraw.line(canvas,0, height - delta, width - delta, height - delta, color_light)
+    #  pygame.gfxdraw.line(canvas,delta + 32, delta, delta + 32, height - delta, color_dark)
+    #  for i in range(4):
+    #     pygame.gfxdraw.line(canvas,delta , delta + 32*(i + 1), delta + 32, delta + 32*(i + 1), color_dark)
+          
 
 def draw_line_separator(canvas,x_distance, y_distance, x2, y2, scale=1, width=-1, **kwargs):
     space = kwargs.get("space", 9) * scale
