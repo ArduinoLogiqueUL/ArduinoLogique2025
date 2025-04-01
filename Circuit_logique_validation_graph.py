@@ -125,8 +125,8 @@ def detect_court_circuits(graph):
         print("⚠️ Erreur : Aucun nœud VCC ou GND trouvé.")
         return
 
-    for vcc in vcc_nodes:
-        for gnd in gnd_nodes:
+    for vcc in vcc_nodes:   
+        for gnd in gnd_nodes:   
             if nx.has_path(graph, vcc, gnd):  # Vérification d'un chemin entre VCC et GND
                 path = nx.shortest_path(graph, vcc, gnd)
                 # if all(graph.nodes[n].get("type") in ["WIRE", "VCC", "GND"] for n in path[1:-1]):

@@ -1,5 +1,88 @@
 from Noeud import *
 import networkx as nx
+# from Graphe_Circuit import is_chip_short_circuit, is_chip_sc_gnd_to_pin_vcc_or_pin_out,is_chip_sc_vcc_to_pin_gnd_or_pin_out
+
+# En attendant de transformer les **arg en une liste 
+# Fonction pour trouver plusieurs noeuds de meme par example le type VCC
+def trouver_noeuds_type(graph, type_recherche):
+    noeuds_types_recherche = [type_recherche]
+    noeuds_types_trouves = [noeud for noeud in graph.nodes if noeud.type in noeuds_types_recherche]
+    return noeuds_types_trouves
+
+# Fonction pour trouver plusieurs noeuds de deux ou plusieurss par example le type VCC et le type GND
+def trouver_noeuds_types(graph, type_recherche, type_recherche_2, **args):
+    noeuds_types_recherche = [type_recherche, type_recherche_2]
+    noeuds_types_trouves = [noeud for noeud in graph.nodes if noeud.type in noeuds_types_recherche]
+    return noeuds_types_trouves
+
+# court circuit 
+def is_chip_short_circuit(graph  :nx.Graph):
+    # On recupere tous les type.gnd ou type.vcc et on regarde si existe un chemin entre ce type.vcc et le type.gnd
+    for n in graph:
+        print(n)
+    type_vcc= trouver_noeuds_type(graph, Type.VCC)
+#    type_gnd= trouver_noeuds_type(graph, Type.GND)
+    all_paths_vcc_gnd = []
+    
+    for n1 in type_vcc:
+#        for n2 in type_gnd:
+#            if nx.has_path(graph,n1,n2):  
+#                all_paths_vcc_gnd.append(list(nx.all_simple_paths(graph, n1, n2)))
+                all_paths_vcc_gnd.append(list(nx.all_simple_paths(graph, n1, Type.GND)))
+            
+#    return list(filter(bool,all_paths_vcc_gnd))
+    return list(filter(bool, all_paths_vcc_gnd)) 
+
+def is_chip_sc_vcc_to_pin_gnd_or_pin_out(graph  :nx.Graph):
+    # On recupere tous les type.gnd ou type.vcc et on regarde si existe un chemin entre ce type.vcc et le type.gnd
+    type_vcc = trouver_noeuds_type(graph, Type.VCC)
+    type_pin_gnd_or_pin_output = trouver_noeuds_types(graph, Type.PIN_GND, Type.PIN_OUTPUT)
+    vcc_to_pin_gnd_or_pin_out = []
+    
+    for n1 in type_vcc:
+#        for n2 in type_pin_gnd_or_pin_output:
+#            if nx.has_path(graph,n1,n2):  
+#                vcc_to_pin_gnd_or_pin_out.append(list(nx.all_simple_paths(graph, n1, n2)))
+                vcc_to_pin_gnd_or_pin_out.append(list(nx.all_simple_paths(graph, n1, [Type.PIN_GND,Type.PIN_OUTPUT])))
+            
+#    return list(filter(bool,all_paths_vcc_gnd))
+    return list(filter(bool, vcc_to_pin_gnd_or_pin_out))
+
+def is_chip_sc_gnd_to_pin_vcc_or_pin_out(graph  :nx.Graph):
+    # On recupere tous les type.gnd ou type.vcc et on regarde si existe un chemin entre ce type.vcc et le type.gnd
+    type_gnd = trouver_noeuds_type(graph, Type.GND)
+#    type_pin_vcc_or_pin_out = trouver_noeuds_types(graph, Type.PIN_VCC,Type.PIN_OUTPUT)
+    gnd_to_pin_vcc_or_pin_out = []
+    
+    for n1 in type_gnd:
+#        for n2 in type_pin_vcc_or_pin_out:
+#            if nx.has_path(graph,n1,n2):  
+#                gnd_to_pin_vcc_or_pin_out.append(list(nx.all_simple_paths(graph, n1, n2)))
+                gnd_to_pin_vcc_or_pin_out.append(list(nx.all_simple_paths(graph, n1, [Type.PIN_VCC,Type.PIN_OUTPUT])))
+            
+#    return list(filter(bool,all_paths_vcc_gnd))
+    return list(filter(bool, gnd_to_pin_vcc_or_pin_out)) 
+
+def find_graph_leaves_types(G: nx.Graph, type_recherche):
+    #  """
+    # Trouve les nœuds du graphe correspondant à un ou plusieurs types.
+    
+    # :param graph: Le graphe NetworkX.
+    # :param type_recherche: Un type unique ou une liste de types.
+    # :param args: Arguments supplémentaires (autres types).
+    # :return: Liste des nœuds correspondant aux types recherchés.
+    # """
+    # recuperer les arguments supplementaires sous forme de liste et list
+    ## et s assurer que la liste n est pas vide
+    # trouver 
+    list_type_recherche = [type_recherche]
+    leaves_types = [node for node in G.nodes if G.degree(node) == 1 and node.type in list_type_recherche]
+        ##print("Feuilles du graphe :", feuilles)
+    for leave_type in leaves_types:
+        print("Feuille du graphe de type : ", leave_type)
+
+    return leaves_types
+
 
 circuit_test_vcc_gnd_cc = [(Type.VCC,"p3"), (Type.HOLE,"i3"), (Type.HOLE,"h3"), (Type.HOLE,"h5"), (Type.HOLE,"j5"), (Type.GND,"n5"), 
                             (Type.GND,"n9"), (Type.VCC,"p9"), (Type.GND,"n15"), (Type.HOLE,"j15"),  (Type.HOLE,"a21"), 
@@ -26,10 +109,10 @@ circuit_test_pin_vcc_gnd_Nopwr_MB = []  #  à remplir
 edges_pin_vcc_gnd_Nopwr_MB = []   #  à remplir
 
 circuit_test_pin_in_et_pin_out = []  #  à remplir
-edges_pin_in_et_pin_out= []   #  à remplir
+edges_pin_in_et_pin_out = []   #  à remplir
 
 circuit_test_flag_out_cc_mb = []  #  à remplir
-edges_flag_out_cc_mb= []   #  à remplir
+edges_flag_out_cc_mb = []   #  à remplir
 
 circuit_test_pin_clock = []  #  à remplir
 edges_pin_clock = []   #  à remplir
@@ -40,7 +123,7 @@ def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
     G = nx.Graph()
     for i,n in enumerate(liste_noeud):
         t, p = n
-        noeuds[str(i+1)] = Noeud( type_= t, position=p)
+        noeuds[str(i+1)] = Noeud( type_= t, position=p, nb_in=2)
         print(f"{i+1} :    {noeuds[str(i+1)]}")
         G.add_node(noeuds[str(i+1)], type = noeuds[str(i+1)].type)
         
@@ -50,13 +133,60 @@ def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
     return G
         
 def is_vcc_gnd_in_CC(g : nx.Graph):
-    vcc_to_gnd : list[list[(str, Type)]]= []     
-    vcc_to_pin_gnd_or_pin_out : list[list[Noeud]]= [] 
-    gnd_to_pin_vcc_or_pin_out : list[list[Noeud]]= [] 
+    all_paths_0 = is_chip_short_circuit(g)
+    print("############# Debut is_chip_short_circuit ############################")
+    for path_0 in all_paths_0: 
+        print("*****************************************************************")
+        for p_0 in path_0: 
+            for p0 in p_0:
+                print(p0)
+    print("############# Fin is_chip_short_circuit ############################")
+    all_paths_1 = is_chip_sc_vcc_to_pin_gnd_or_pin_out(g)
+    print("############# Debut is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
+    for paths_1 in all_paths_1: 
+        print("*****************************************************************")
+        for p_1 in paths_1: 
+            for p1 in p_1:
+                print(p1)
+    print("############# Fin is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
+    all_paths_2 = is_chip_sc_gnd_to_pin_vcc_or_pin_out(g)
+    print("############# Debut is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
+    for paths_2 in all_paths_2: 
+        print("*****************************************************************")
+        for p_2 in paths_2: 
+            for p2 in p_2:
+                print(p2)
+    print("############# Fin is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
+    vcc_to_gnd : list[list[(str, Type)]] = [] # is_chip_short_circuit(g)     
+    vcc_to_pin_gnd_or_pin_out : list[list[Noeud]] = [] # is_chip_sc_vcc_to_pin_gnd_or_pin_out(g) 
+    gnd_to_pin_vcc_or_pin_out : list[list[Noeud]] = [] # is_chip_sc_gnd_to_pin_vcc_or_pin_out(g) 
     
     return vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out
 
+## liste_sans_vide = [lst for lst in liste_de_listes if lst]
+## liste_sans_vide = list(filter(bool, liste_de_listes))
+def all_simple_paths(g,leaves_holes,type_vcc):
+    list_paths = []
+    for leave_hole in leaves_holes:
+#        for type_vcc_one in type_vcc:
+#            if nx.has_path(g,leave_hole,type_vcc_one):  
+#                list_paths.append(list(nx.all_simple_paths(g,leave_hole,type_vcc_one)))
+        list_paths.append(list(nx.all_simple_paths(g,leave_hole,type_vcc)))
+    return list(filter(bool, list_paths)) ## supprimer les listes vides
+
 def is_vcc_gnd_in_CO(g : nx.Graph):
+    
+    ## chercher les feuilles qui finissent par hoole
+    ## chercher les 
+    leaves_holes = find_graph_leaves_types(g, Type.HOLE)
+
+    ## 
+##    type_vcc = trouver_noeuds_type(g, Type.VCC)
+##    type_gnd = trouver_noeuds_type(g, Type.GND)
+
+    vcc_to_hole_1 = all_simple_paths(g,leaves_holes,Type.VCC)
+    gnd_to_hole_1 = all_simple_paths(g,leaves_holes,Type.GND)
+
     vcc_to_hole : list[list[(str, Type)]]= []
     gnd_to_hole : list[list[(str, Type)]]= []
     
@@ -67,12 +197,48 @@ def is_vcc_gnd_in_CO(g : nx.Graph):
 
 def is_vcc_gnd_in_no_pwr_or_MB(g : nx.Graph):
     pin_vcc_gnd_no_pwr : list[(str, Type)] = []
-    pin_vcc_gnd_mb :list[list[Noeud]]= [] 
+    pin_vcc_gnd_mb :list[list[Noeud]] = [] 
     
-    # à terminer
-    
+    # à terminer    
+    ## parcourir les noeuds
+        ## chercher les feuilles qui finissent par hoole
+    ## chercher les 
+    pin_vcc_gnd_no_pwr_1 = []
+    pin_vcc_gnd_mb_1 = []
+    result = []
+    ## 
+#    type_pin_vcc = trouver_noeuds_type(g, Type.PIN_VCC)
+#    type_pin_gnd = trouver_noeuds_type(g, Type.PIN_GND)
+    types_pin_vcc_gnd = trouver_noeuds_types(g, Type.PIN_VCC,Type.PIN_GND)
+#    type_power_vcc_or_gnd = trouver_noeuds_types(g, Type.VCC,Type.GND)
+    ## valider que le pin.vcc est connecte 
+    for one_pin_vcc_gnd in types_pin_vcc_gnd:
+#        for vcc_or_gnd in type_power_vcc_or_gnd:
+        if one_pin_vcc_gnd == Type.PIN_VCC:
+#           if not(nx.has_path(g,one_pin_vcc_gnd,Type.VCC)):  ## mauvais branchement ou no_power
+            result.append(list(nx.all_simple_paths(g,one_pin_vcc_gnd,Type.VCC)))
+            if not result: # liste vide ajout aux deux listes 
+                pin_vcc_gnd_no_pwr_1.append(one_pin_vcc_gnd) 
+                pin_vcc_gnd_mb_1.append(one_pin_vcc_gnd)
+            # elif result: ## all hole 
+            #     pin_vcc_gnd_no_pwr_1.append(one_pin_vcc_gnd)
+            # else:## liste non vide avec elements avec hole et autres
+            #     pin_vcc_gnd_mb_1.append(one_pin_vcc_gnd)         
+        else:# one_pin_vcc_gnd == Type.PIN_GND
+            result.append(list(nx.all_simple_paths(g,one_pin_vcc_gnd,Type.GND)))
+            if not result: # liste vide 
+                pin_vcc_gnd_no_pwr_1.append(one_pin_vcc_gnd) 
+                pin_vcc_gnd_mb_1.append(one_pin_vcc_gnd)
+            # elif result: ## all hole 
+            #     pin_vcc_gnd_no_pwr_1.append(one_pin_vcc_gnd)
+            # else:## liste non vide avec elements avec hole et autres
+            #     pin_vcc_gnd_mb_1.append(one_pin_vcc_gnd)         
+             
+                      
+        result.clear() # vider la liste 
     return pin_vcc_gnd_no_pwr, pin_vcc_gnd_mb
 
+## le dernier a encoder
 def is_pin_in_ok(g : nx.Graph):
     pin_in_cc : list[list[Noeud]]= [] 
     pin_out_cc :list[list[Noeud]]= [] 
@@ -108,6 +274,9 @@ def is_pin_clock_ok(g :nx.Graph):
 
 
 g = creation_graphe(circuit_test_vcc_gnd_cc, edges_vcc_gnd)
+for n in g:
+     print(n)
+
 vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out = is_vcc_gnd_in_CC(g)
 print(vcc_to_gnd)
 # résultat attendu : [[("p3", Type.VCC), ("i3", Type.HOLE), ("h3", Type.HOLE), ("h5", Type.HOLE), ("j5", Type.HOLE), ("n5", Type.GND)], 

@@ -36,7 +36,7 @@ class Type(Enum):
 class Noeud:
     _id : int = 0
 
-    def __init__(self, id = None, position = "", type_ = Type.VOID, func = "", nb_int : int = 2):
+    def __init__(self, id = None, position = "", type_ = Type.VOID, func = "", nb_in : int = 2):
         Noeud._id += 1
         self._id_user = id
         if (id == None):
@@ -44,7 +44,7 @@ class Noeud:
         self._position : str = position
         self._type : Type = type_
         self._func : str = func
-        self_nb_in : int = nb_int
+        self_nb_in : int = nb_in
         #self._func_id : int = func_id
 
     def __str__(self):

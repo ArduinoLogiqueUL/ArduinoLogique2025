@@ -242,17 +242,47 @@ def is_chip_bad_powered(graph  :nx.Graph):
 # court circuit 
 def is_chip_short_circuit(graph  :nx.Graph):
     # On recupere tous les type.gnd ou type.vcc et on regarde si existe un chemin entre ce type.vcc et le type.gnd
+    for n in graph:
+        print(n)
     type_vcc= trouver_noeuds_type(graph, Type.VCC)
     type_gnd= trouver_noeuds_type(graph, Type.GND)
     all_paths_vcc_gnd = []
     
     for n1 in type_vcc:
         for n2 in type_gnd:
-            if nx.has_path(G,n1,n2):  
+            if nx.has_path(graph,n1,n2):  
                 all_paths_vcc_gnd.append(list(nx.all_simple_paths(graph, n1, n2)))
             
 #    return list(filter(bool,all_paths_vcc_gnd))
     return all_paths_vcc_gnd
+
+def is_chip_sc_vcc_to_pin_gnd_or_pin_out(graph  :nx.Graph):
+    # On recupere tous les type.gnd ou type.vcc et on regarde si existe un chemin entre ce type.vcc et le type.gnd
+    type_vcc = trouver_noeuds_type(graph, Type.VCC)
+    type_pin_gnd_or_pin_output = trouver_noeuds_types(graph, Type.PIN_GND, Type.PIN_OUTPUT)
+    vcc_to_pin_gnd_or_pin_out = []
+    
+    for n1 in type_vcc:
+        for n2 in type_pin_gnd_or_pin_output:
+            if nx.has_path(graph,n1,n2):  
+                vcc_to_pin_gnd_or_pin_out.append(list(nx.all_simple_paths(graph, n1, n2)))
+            
+#    return list(filter(bool,all_paths_vcc_gnd))
+    return vcc_to_pin_gnd_or_pin_out
+
+def is_chip_sc_gnd_to_pin_vcc_or_pin_out(graph  :nx.Graph):
+    # On recupere tous les type.gnd ou type.vcc et on regarde si existe un chemin entre ce type.vcc et le type.gnd
+    type_gnd = trouver_noeuds_type(graph, Type.GND)
+    type_pin_vcc_or_pin_out = trouver_noeuds_types(graph, Type.PIN_VCC,Type.PIN_OUTPUT)
+    gnd_to_pin_vcc_or_pin_out = []
+    
+    for n1 in type_gnd:
+        for n2 in type_pin_vcc_or_pin_out:
+            if nx.has_path(graph,n1,n2):  
+                gnd_to_pin_vcc_or_pin_out.append(list(nx.all_simple_paths(graph, n1, n2)))
+            
+#    return list(filter(bool,all_paths_vcc_gnd))
+    return gnd_to_pin_vcc_or_pin_out
 
 
 # court circuit 
