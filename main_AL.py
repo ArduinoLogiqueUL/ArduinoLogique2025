@@ -47,10 +47,42 @@ comp.workshop.draw()
 
 #win.mainloop()
 gfx.draw_menu()
-cursor_img = pygame.image.load("Images/zoom-out.png").convert_alpha()
+# cursor_img = pygame.image.load("Images/icons/pointer2.png").convert_alpha()  
+cursor_img = pygame.image.load("Images/Cur_le-curseur_blanc.png").convert_alpha()  
 largeur, hauteur = cursor_img.get_size()
 destination_size = (32, 32)
 cursor_scaled = pygame.transform.scale(cursor_img, destination_size)
+
+cursor_menu = pygame.image.load("Images/Cursor_menu_shadow.png").convert_alpha()  
+cell_size_menu = (24, 24)
+cursor_menu = pygame.transform.scale(cursor_menu, cell_size_menu)
+gfx.canvas.blit(cursor_menu, (12,16))
+
+cursor_menu = pygame.image.load("Images/Cursor_menu_blue2.png").convert_alpha()  
+cell_size_menu = (24, 24)
+cursor_menu = pygame.transform.scale(cursor_menu, cell_size_menu)
+gfx.canvas.blit(cursor_menu, (8,12))
+
+save_menu = pygame.image.load("Images/icons/arrow_save_menu_shadow24.png").convert_alpha()  
+cell_size_menu = (24, 24)
+save_menu = pygame.transform.scale(save_menu, cell_size_menu)
+gfx.canvas.blit(save_menu, (12,61))
+
+save_menu = pygame.image.load("Images/icons/arrow_save_menu_blue24.png").convert_alpha()  
+cell_size_menu = (24, 24)
+save_menu = pygame.transform.scale(save_menu, cell_size_menu)
+gfx.canvas.blit(save_menu, (8,57))
+
+flag_menu = pygame.image.load("Images/icons/flag_menu_yellow.png").convert_alpha()  
+cell_size_menu = (24, 24)
+flag_menu = pygame.transform.scale(flag_menu, cell_size_menu)
+gfx.canvas.blit(flag_menu, (8,147))
+
+chip_menu = pygame.image.load("Images/icons/chip_menu_yellow.png").convert_alpha()  
+cell_size_menu = (24, 24)
+chip_menu = pygame.transform.scale(chip_menu, cell_size_menu)
+gfx.canvas.blit(chip_menu, (8,192))
+
 pygame.mouse.set_visible(False)
 pos = pygame.mouse.get_pos()
 zone_rect = pygame.Rect(pos[0], pos[1], destination_size[0], destination_size[1])

@@ -19,13 +19,13 @@ def init_gfx(width : int = None, height :int  = None, titre : str = "Arduino Log
      #canvas.fill((51, 51, 51))
      canvas.fill((30, 30, 30))
      
-def draw_menu(width : int = 40, height : int = None):
+def draw_menu(width : int = 48, height : int = None):
      color_light = (200, 200, 200) 
      color_dark =(100, 100, 100)
      if height == None:
           largeur, height = canvas.get_size()
      zone = pygame.Rect(0, 0, width, height)
-     pygame.gfxdraw.box(canvas,zone,(60,60,60))
+     pygame.gfxdraw.box(canvas,zone,(40,40,40))
      zone = pygame.Rect(0, 1, width, height)
      pygame.gfxdraw.rectangle(canvas,zone, color_dark)
      #pygame.gfxdraw.line(canvas,width, 0, width, height, color_dark)
