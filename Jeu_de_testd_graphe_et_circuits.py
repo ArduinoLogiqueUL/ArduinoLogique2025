@@ -9,6 +9,10 @@ def trouver_noeuds_type(graph, type_recherche):
     noeuds_types_trouves = [noeud for noeud in graph.nodes if noeud.type in noeuds_types_recherche]
     return noeuds_types_trouves
 
+def find_type_node(graph, types_2_search : list[Type]):
+    type_nodes_found= [noeud for noeud in graph.nodes if noeud.type in types_2_search]
+    return type_nodes_found
+
 # Fonction pour trouver plusieurs noeuds de deux ou plusieurss par example le type VCC et le type GND
 def trouver_noeuds_types(graph, type_recherche, type_recherche_2, **args):
     noeuds_types_recherche = [type_recherche, type_recherche_2]
@@ -124,7 +128,7 @@ def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
     for i,n in enumerate(liste_noeud):
         t, p = n
         noeuds[str(i+1)] = Noeud( type_= t, position=p, nb_in=2)
-        print(f"{i+1} :    {noeuds[str(i+1)]}")
+        # print(f"{i+1} :    {noeuds[str(i+1)]}")
         G.add_node(noeuds[str(i+1)], type = noeuds[str(i+1)].type)
         
     list_edges = [(noeuds[str(e[0])], noeuds[str(e[1])]) for e in liste_edge]
@@ -132,35 +136,71 @@ def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
         
     return G
         
+# def is_vcc_gnd_in_CC(g : nx.Graph):
+#     all_paths_0 = is_chip_short_circuit(g)
+#     print("############# Debut is_chip_short_circuit ############################")
+#     for path_0 in all_paths_0: 
+#         print("*****************************************************************")
+#         for p_0 in path_0: 
+#             for p0 in p_0:
+#                 print(p0)
+#     print("############# Fin is_chip_short_circuit ############################")
+#     all_paths_1 = is_chip_sc_vcc_to_pin_gnd_or_pin_out(g)
+#     print("############# Debut is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
+#     for paths_1 in all_paths_1: 
+#         print("*****************************************************************")
+#         for p_1 in paths_1: 
+#             for p1 in p_1:
+#                 print(p1)
+#     print("############# Fin is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
+#     all_paths_2 = is_chip_sc_gnd_to_pin_vcc_or_pin_out(g)
+#     print("############# Debut is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
+#     for paths_2 in all_paths_2: 
+#         print("*****************************************************************")
+#         for p_2 in paths_2: 
+#             for p2 in p_2:
+#                 print(p2)
+#     print("############# Fin is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
+#     vcc_to_gnd : list[list[(str, Type)]] = [] # is_chip_short_circuit(g)     
+#     vcc_to_pin_gnd_or_pin_out : list[list[Noeud]] = [] # is_chip_sc_vcc_to_pin_gnd_or_pin_out(g) 
+#     gnd_to_pin_vcc_or_pin_out : list[list[Noeud]] = [] # is_chip_sc_gnd_to_pin_vcc_or_pin_out(g) 
+    
+#     return vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out
+
 def is_vcc_gnd_in_CC(g : nx.Graph):
-    all_paths_0 = is_chip_short_circuit(g)
-    print("############# Debut is_chip_short_circuit ############################")
-    for path_0 in all_paths_0: 
-        print("*****************************************************************")
-        for p_0 in path_0: 
-            for p0 in p_0:
-                print(p0)
-    print("############# Fin is_chip_short_circuit ############################")
-    all_paths_1 = is_chip_sc_vcc_to_pin_gnd_or_pin_out(g)
-    print("############# Debut is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
-    for paths_1 in all_paths_1: 
-        print("*****************************************************************")
-        for p_1 in paths_1: 
-            for p1 in p_1:
-                print(p1)
-    print("############# Fin is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
-    all_paths_2 = is_chip_sc_gnd_to_pin_vcc_or_pin_out(g)
-    print("############# Debut is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
-    for paths_2 in all_paths_2: 
-        print("*****************************************************************")
-        for p_2 in paths_2: 
-            for p2 in p_2:
-                print(p2)
-    print("############# Fin is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
+    # all_paths_0 = is_chip_short_circuit(g)
+    # print("############# Debut is_chip_short_circuit ############################")
+    # for path_0 in all_paths_0: 
+    #     print("*****************************************************************")
+    #     for p_0 in path_0: 
+    #         for p0 in p_0:
+    #             print(p0)
+    # print("############# Fin is_chip_short_circuit ############################")
+    # all_paths_1 = is_chip_sc_vcc_to_pin_gnd_or_pin_out(g)
+    # print("############# Debut is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
+    # for paths_1 in all_paths_1: 
+    #     print("*****************************************************************")
+    #     for p_1 in paths_1: 
+    #         for p1 in p_1:
+    #             print(p1)
+    # print("############# Fin is_chip_sc_vcc_to_pin_gnd_or_pin_out ############################")
+    # all_paths_2 = is_chip_sc_gnd_to_pin_vcc_or_pin_out(g)
+    # print("############# Debut is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
+    # for paths_2 in all_paths_2: 
+    #     print("*****************************************************************")
+    #     for p_2 in paths_2: 
+    #         for p2 in p_2:
+    #             print(p2)
+    # print("############# Fin is_chip_sc_gnd_to_pin_vcc_or_pin_out ############################")
     vcc_to_gnd : list[list[(str, Type)]] = [] # is_chip_short_circuit(g)     
     vcc_to_pin_gnd_or_pin_out : list[list[Noeud]] = [] # is_chip_sc_vcc_to_pin_gnd_or_pin_out(g) 
     gnd_to_pin_vcc_or_pin_out : list[list[Noeud]] = [] # is_chip_sc_gnd_to_pin_vcc_or_pin_out(g) 
-    
+    for n in list_of_vcc:
+        vcc_to_gnd.extend(list(nx.all_simple_paths(g, n, Type.GND)))
+        vcc_to_pin_gnd_or_pin_out.extend(list(nx.all_simple_paths(g, n, [Type.PIN_OUTPUT, Type.PIN_GND])))
+    for n in list_of_gnd:
+        gnd_to_pin_vcc_or_pin_out.extend(list(nx.all_simple_paths(g, n, [Type.PIN_OUTPUT, Type.PIN_VCC]))) 
+        
     return vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out
 
 ## liste_sans_vide = [lst for lst in liste_de_listes if lst]
@@ -274,18 +314,36 @@ def is_pin_clock_ok(g :nx.Graph):
 
 
 g = creation_graphe(circuit_test_vcc_gnd_cc, edges_vcc_gnd)
-for n in g:
-     print(n)
+# for n in g:
+#      print(n)
 
+list_of_vcc = find_type_node(g,[Type.VCC])
+list_of_gnd = find_type_node(g,[Type.GND])
 vcc_to_gnd, vcc_to_pin_gnd_or_pin_out, gnd_to_pin_vcc_or_pin_out = is_vcc_gnd_in_CC(g)
-print(vcc_to_gnd)
+print("***************************** vcc to gnd CC ********************************************************")
+for i,l in enumerate(vcc_to_gnd):
+    print(f"chemin {i} :\n")
+    for n in l:
+        print(n)
 # résultat attendu : [[("p3", Type.VCC), ("i3", Type.HOLE), ("h3", Type.HOLE), ("h5", Type.HOLE), ("j5", Type.HOLE), ("n5", Type.GND)], 
 # suite               [("n9", Type.GND), ("p9", Type.VCC)]]
-print(vcc_to_pin_gnd_or_pin_out)
+
+print("***************************** vcc_to_pin_gnd_or_pin_out ********************************************************")
+for i,l in enumerate(vcc_to_pin_gnd_or_pin_out):
+    print(f"chemin {i} :\n")
+    for n in l:
+        print(n)
+
 # résultat attendu : [[("n21", Type.VCC), ("a21", Type.HOLE), ("e21", Type.PIN_GND)], 
 # suite               [("p27", Type.VCC), ("j27", Type.HOLE), ("g27", Type.HOLE), ("c27", Type.HOLE), ("b27", Type.HOLE), ("b32", Type.HOLE), 
 # suite                ("e32", Type.PIN_OUT)]]
-print(gnd_to_pin_vcc_or_pin_out)
+
+print("***************************** gnd_to_pin_vcc_or_pin_out ********************************************************")
+for i,l in enumerate(gnd_to_pin_vcc_or_pin_out):
+    print(f"chemin {i} :\n")
+    for n in l:
+        print(n)
+
 # résultat attendu : [[("n15", Type.GND), ("j15", Type.HOLE), ("f15", Type.PIN_VCC)], 
 # suite               [("n40", Type.GND), ("a40", Type.HOLE), ("c40", Type.HOLE), ("c35", Type.HOLE), ("e35", Type.PIN_OUT)]]
 
