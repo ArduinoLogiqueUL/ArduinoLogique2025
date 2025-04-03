@@ -20,26 +20,51 @@ def init_gfx(width : int = None, height :int  = None, titre : str = "Arduino Log
      canvas.fill((30, 30, 30))
      
 def draw_menu(width : int = 48, height : int = None):
-     color_light = (200, 200, 200) 
-     color_dark =(100, 100, 100)
-     if height == None:
-          largeur, height = canvas.get_size()
-     zone = pygame.Rect(0, 0, width, height)
-     pygame.gfxdraw.box(canvas,zone,(40,40,40))
-     zone = pygame.Rect(0, 1, width, height)
-     pygame.gfxdraw.rectangle(canvas,zone, color_dark)
-     #pygame.gfxdraw.line(canvas,width, 0, width, height, color_dark)
-     #pygame.gfxdraw.line(canvas,0, height, width, height,color_dark )
-     delta = 3
-    #  for delta in range(1,delta):
-    #     color_light = ( 100 + delta*50, 100 + delta*50, 100 +  delta*50) 
-    #     zone = pygame.Rect(delta, delta, width - delta, height - delta)
-    #     pygame.gfxdraw.rectangle(canvas,zone, color_light)
-    #     #pygame.gfxdraw.line(canvas,width-delta, 0, width - delta, height- delta, color_light )
-    #     #pygame.gfxdraw.line(canvas,0, height - delta, width - delta, height - delta, color_light)
-    #  pygame.gfxdraw.line(canvas,delta + 32, delta, delta + 32, height - delta, color_dark)
-    #  for i in range(4):
-    #     pygame.gfxdraw.line(canvas,delta , delta + 32*(i + 1), delta + 32, delta + 32*(i + 1), color_dark)
+    color_light = (200, 200, 200) 
+    color_dark =(100, 100, 100)
+    if height == None:
+        largeur, height = canvas.get_size()
+    zone = pygame.Rect(0, 0, width, height)
+    pygame.gfxdraw.box(canvas,zone,(40,40,40))
+    zone = pygame.Rect(0, 1, width, height)
+    pygame.gfxdraw.rectangle(canvas,zone, color_dark)
+    
+    # cursor_menu = pygame.image.load("Images/icons/Cursor_menu_shadow.png").convert_alpha()  
+    # cell_size_menu = (24, 24)
+    # cursor_menu = pygame.transform.scale(cursor_menu, cell_size_menu)
+    #gfx.canvas.blit(cursor_menu, (10,14))
+
+    cursor_menu = pygame.image.load("Images/icons/Cursor_menu_gray.png").convert_alpha()  
+    cell_size_menu = (24, 24)
+    cursor_menu = pygame.transform.scale(cursor_menu, cell_size_menu)
+    canvas.blit(cursor_menu, (12,12))
+
+    # save_menu = pygame.image.load("Images/icons/arrow_save_menu_shadow24.png").convert_alpha()  
+    # cell_size_menu = (24, 24)
+    # save_menu = pygame.transform.scale(save_menu, cell_size_menu)
+    #gfx.canvas.blit(save_menu, (10,59))
+
+    save_menu = pygame.image.load("Images/icons/arrow_save_menu_gray.png").convert_alpha()  
+    cell_size_menu = (24, 24)
+    save_menu = pygame.transform.scale(save_menu, cell_size_menu)
+    canvas.blit(save_menu, (12,57))
+
+    wire_menu = pygame.image.load("Images/icons/wire_menu_gray.png").convert_alpha()  
+    cell_size_menu = (24, 24)
+    wire_menu = pygame.transform.scale(wire_menu, cell_size_menu)
+    canvas.blit(wire_menu, (12,102))
+
+
+    flag_menu = pygame.image.load("Images/icons/flag_menu_gray.png").convert_alpha()  
+    cell_size_menu = (24, 24)
+    flag_menu = pygame.transform.scale(flag_menu, cell_size_menu)
+    canvas.blit(flag_menu, (12,147))
+
+    chip_menu = pygame.image.load("Images/icons/chip_menu_white.png").convert_alpha()  
+    cell_size_menu = (24, 24)
+    chip_menu = pygame.transform.scale(chip_menu, cell_size_menu)
+    canvas.blit(chip_menu, (12,192))
+
           
 
 def draw_line_separator(canvas,x_distance, y_distance, x2, y2, scale=1, width=-1, **kwargs):
