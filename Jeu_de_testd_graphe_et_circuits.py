@@ -142,14 +142,65 @@ edges_pin_vcc_gnd_Nopwr_MB = [(27,1),(40,2),(5,6),(6,7), (7,8),(8,42), (53,9),(9
                               (10,54),(10,11),(11,12), (3,55), (68,4)
                               ]   #  à remplir
 
-circuit_test_pin_in_et_pin_out = []  #  à remplir
-edges_pin_in_et_pin_out = []   #  à remplir
+circuit_test_pin_in_et_pin_out = [
+### FILS ###########################
+(Type.VCC,"p3"), (Type.HOLE,"j3"), (Type.GND,"n4"),
+(Type.HOLE,"j4"), (Type.HOLE,"i4"), (Type.HOLE,"i7"), (Type.HOLE,"h4"), (Type.HOLE,"h8"),
+(Type.HOLE,"g4"), (Type.HOLE,"g5"), (Type.HOLE,"d5"), (Type.HOLE,"d6"), (Type.HOOLE,"a6"),
+(Type.GND,"n6"), (Type.HOOLE,"a9"), (Type.GND,"n9"), (Type.HOOLE,"a17"),	(Type.HOOLE,"a20"),	
+### FLAG ###########################
+(Type.FLAG_INPUT,"d3"),	(Type.FLAG_INPUT,"a3"),	(Type.FLAG_OUTPUT,"a8"), (Type.FLAG_OUTPUT,"d8"),
+(Type.FLAG_CLOCK,"g9"),	(Type.FLAG_OUTPUT,"a15"), (Type.FLAG_INPUT,"c17"), (Type.FLAG_CLOCK,"g17"), 
+### 74HC00-1 #######################
+(Type.PIN_VCC,"f3"), (Type.PIN_INPUT,"f4"), (Type.PIN_INPUT,"f5"), (Type.PIN_OUTPUT,"f6"),	
+(Type.PIN_INPUT,"f7"), (Type.PIN_INPUT,"f8"),	(Type.PIN_OUTPUT,"f9"),	(Type.PIN_INPUT,"e3"), (Type.PIN_INPUT,"e4"),
+(Type.PIN_OUTPUT,"e5"),	(Type.PIN_INPUT,"e6"), (Type.PIN_INPUT,"e7"), (Type.PIN_OUTPUT,"e8"), (Type.PIN_GND,"e9"), 
+### 74HC00-2 #######################
+(Type.PIN_VCC,"f15"), (Type.PIN_INPUT,"f16"),(Type.PIN_INPUT,"f17"),(Type.PIN_OUTPUT,"f18"),(Type.PIN_INPUT,"f19"),	
+(Type.PIN_INPUT,"f20"),	(Type.PIN_OUTPUT,"f21"), (Type.PIN_INPUT,"e15"),	(Type.PIN_INPUT,"e16"),	
+(Type.PIN_OUTPUT,"e17"), (Type.PIN_INPUT,"e18"), (Type.PIN_INPUT,"e19"),(Type.PIN_OUTPUT,"e20"), 
+(Type.PIN_GND,"e21"),(Type.HOOLE,"b16"),(Type.HOOLE,"b25"), (Type.HOOLE,"c20"), (Type.HOOLE,"c25")
+]  #  à remplir
+edges_pin_in_et_pin_out = [
+(1,2), (2,27), (3,4),(4,5),(5,7), (7,9), (9,28), (5,6), (6,31),
+(7,8), (8,32), (9,10), (10,29), (36,11), (11,12), (12,37), (12,13),(13,14), (40,15),(15,16), (53,57),(57,58),
+(58,56),(56,55),(55,49),(50,17),(17,18),(18,57),(23,33), (34,19),(19,20),(39,22),(22,21),(48,24),(26,43),(50,25)
+     
+]   #  à remplir
 
-circuit_test_flag_out_cc_mb = []  #  à remplir
-edges_flag_out_cc_mb = []   #  à remplir
+circuit_test_flag_out_cc_mb = [
+### FILS  ###########################
+(Type.VCC,"p3"), (Type.HOLE,"j3"),(Type.GND,"a9"), (Type.GND,"n9"),
+###  FLAG   ###########################
+(Type.FLAG_OUTPUT,"h3"), (Type.FLAG_OUTPUT,"c9"),
+(Type.FLAG_OUTPUT,"h12"), (Type.FLAG_OUTPUT,"h15"), (Type.FLAG_OUTPUT,"a15"), (Type.FLAG_OUTPUT,"a21"),
+(Type.PIN_VCC,"f3"), (Type.PIN_INPUT,"f4"), (Type.PIN_INPUT,"f5"), (Type.PIN_OUTPUT,"f6"),	
+(Type.PIN_INPUT,"f7"), (Type.PIN_INPUT,"f8"),	(Type.PIN_OUTPUT,"f9"),	(Type.PIN_INPUT,"e3"),
+(Type.PIN_INPUT,"e4"), (Type.PIN_OUTPUT,"e5"), (Type.PIN_INPUT,"e6"), (Type.PIN_INPUT,"e7"),
+(Type.PIN_OUTPUT,"e8"),	(Type.PIN_GND,"e9"), (Type.PIN_VCC,"f15"), (Type.PIN_INPUT,"f16"),
+(Type.PIN_INPUT,"f17"),	(Type.PIN_OUTPUT,"f18"),(Type.PIN_INPUT,"f19"),	(Type.PIN_INPUT,"f20"),
+(Type.PIN_OUTPUT,"f21"), (Type.PIN_INPUT,"e15"),	(Type.PIN_INPUT,"e16"), (Type.PIN_OUTPUT,"e17"), 
+(Type.PIN_INPUT,"e18"),	(Type.PIN_INPUT,"e19"),	(Type.PIN_OUTPUT,"e20"), (Type.PIN_GND,"e21")
+    
 
-circuit_test_pin_clock = []  #  à remplir
-edges_pin_clock = []   #  à remplir
+]  #  à remplir
+edges_flag_out_cc_mb = [
+(1,2), (2,5), (5,11), (24,6), (6,3), (3,4), (8,25), (32,9), (38,10)     
+]   #  à remplir
+
+circuit_test_pin_clock = [
+### FLAG ###########################
+(Type.FLAG_CLOCK,"c12"), (Type.FLAG_CLOCK,"a12"), (Type.FLAG_CLOCK,"h15"),
+### 74H109 #######################
+(Type.PIN_VCC,"f10"), (Type.PIN_INPUT,"f11"),	(Type.PIN_INPUT,"f12"),	(Type.PIN_INPUT,"13"),
+(Type.PIN_INPUT,"f14"),	(Type.PIN_INPUT,"f15"),	(Type.PIN_OUTPUT,"f16"), (Type.PIN_OUTPUT,"f17"),
+(Type.PIN_INPUT,"e10"),	(Type.PIN_INPUT,"e11"),	(Type.PIN_INPUT,"e12"),	(Type.PIN_INPUT,"e13"),
+(Type.PIN_INPUT,"e14"),	(Type.PIN_OUTPUT,"e15"), (Type.PIN_OUTPUT,"e16"), (Type.PIN_GND,"e17")
+
+]  #  à remplir
+edges_pin_clock = [
+(14,1), (1,2), (9,3)
+]   #  à remplir
 
 
 def creation_graphe(liste_noeud : list, liste_edge : list) -> nx.Graph:
@@ -393,13 +444,17 @@ def is_pin_out_co(g : nx.Graph):
     pin_out_co_1 :list[Noeud] = []
     types_pin_out :list[Noeud] = []
     result :list[Noeud] = []
-    
+    result_1 :list[Noeud] = []
+    result_2 :list[Noeud] = []
     types_pin_out = trouver_noeuds_type(g, Type.PIN_OUTPUT)
     for one_pin_out in types_pin_out: ## le trouver les pins input et output associes au pin.vcc du composant    
         result.clear() 
-        result.extend(list(nx.all_simple_paths(g,one_pin_out,Type.PIN_INPUT)))  
-        if (len(pin_out_co_1)) == one_pin_out.nb_in: ## pin en co
-            pin_out_co_1.extend(result)
+        result.extend(list(nx.all_simple_paths(g,one_pin_out,Type.PIN_INPUT)))
+        # liste de comprehension 
+        result_1 = [one_result for one_result in result if len(one_result) == one_pin_out.nb_in] ## edge interne
+        result_2.append(result_1) 
+#        if (len(pin_out_co_1)) == one_pin_out.nb_in: ## pin en co
+        pin_out_co_1.extend(result_2)
 
     return pin_out_co_1
 
@@ -457,7 +512,7 @@ def is_pin_clock_ok(g :nx.Graph):
             pin_clock_ko.extend(one_pin_clock)
         elif len(result)>1:
             pin_clock_ko.extend(result) 
-            
+
     return pin_clock_ko
 
 
@@ -551,9 +606,9 @@ print(flag_out_mb)
 #                     [("e21", Type.PIN_GND), ("a21", Type.FLAG_OUTPUT)], 
 # suite               [ ("h12", Type.PIN_IN)]]
 
-g_4 = creation_graphe(circuit_test_flag_out_cc_mb, edges_flag_out_cc_mb)
+g_4 = creation_graphe(circuit_test_pin_clock, edges_pin_clock)
 pin_clock_ko = is_pin_clock_ok(g_4)
 print(pin_clock_ko)
-# résultat attendu : [[("e12", Type.PIN_CLOCK), ("d12", Type.FLAG_CLOCK)], 
+# résultat attendu : [[("e12", Type.PIN_CLOCK), ("c12", Type.FLAG_CLOCK)], 
 # suite               [("e12", Type.PIN_CLOCK), ("a12", Type.FLAG_CLOCK)]]
 
