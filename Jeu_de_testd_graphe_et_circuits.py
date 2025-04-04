@@ -398,7 +398,7 @@ def is_pin_out_co(g : nx.Graph):
     for one_pin_out in types_pin_out: ## le trouver les pins input et output associes au pin.vcc du composant    
         result.clear() 
         result.extend(list(nx.all_simple_paths(g,one_pin_out,Type.PIN_INPUT)))  
-        if (len(pin_out_co_1))>= one_pin_out.nb_in: ## pin en co
+        if (len(pin_out_co_1)) == one_pin_out.nb_in: ## pin en co
             pin_out_co_1.extend(result)
 
     return pin_out_co_1
@@ -448,11 +448,16 @@ def is_flag_out_mb(g :nx.Graph):
 def is_pin_clock_ok(g :nx.Graph):
     pin_clock_ko :list[list[Noeud]]= [] 
     types_pin_clock :list[Noeud] = []
-    
+    result  :list[Noeud] = []
     types_pin_clock = trouver_noeuds_type(g, Type.PIN_CLOCK)
     for one_pin_clock in types_pin_clock: ## le trouver les pins input et output associes au pin.vcc du composant    
-        pin_clock_ko.extend(list(nx.all_simple_paths(g,one_pin_clock,Type.FLAG_CLOCK)))  
-
+        result.clear()
+        result.extend(list(nx.all_simple_paths(g,one_pin_clock,Type.FLAG_CLOCK)))  
+        if not result:
+            pin_clock_ko.extend(one_pin_clock)
+        elif len(result)>1:
+            pin_clock_ko.extend(result) 
+            
     return pin_clock_ko
 
 
