@@ -169,8 +169,8 @@ edges_pin_in_et_pin_out = [
 ]   #  à remplir
 
 circuit_test_flag_out_cc_mb = [
-### FILS  ###########################
-(Type.VCC,"p3"), (Type.HOLE,"j3"),(Type.GND,"a9"), (Type.GND,"n9"),
+### FILS  #############################
+(Type.VCC,"p3"), (Type.HOLE,"j3"), (Type.GND,"a9"), (Type.GND,"n9"),
 ###  FLAG   ###########################
 (Type.FLAG_OUTPUT,"h3"), (Type.FLAG_OUTPUT,"c9"),
 (Type.FLAG_OUTPUT,"h12"), (Type.FLAG_OUTPUT,"h15"), (Type.FLAG_OUTPUT,"a15"), (Type.FLAG_OUTPUT,"a21"),
@@ -181,11 +181,11 @@ circuit_test_flag_out_cc_mb = [
 (Type.PIN_INPUT,"f17"),	(Type.PIN_OUTPUT,"f18"),(Type.PIN_INPUT,"f19"),	(Type.PIN_INPUT,"f20"),
 (Type.PIN_OUTPUT,"f21"), (Type.PIN_INPUT,"e15"),	(Type.PIN_INPUT,"e16"), (Type.PIN_OUTPUT,"e17"), 
 (Type.PIN_INPUT,"e18"),	(Type.PIN_INPUT,"e19"),	(Type.PIN_OUTPUT,"e20"), (Type.PIN_GND,"e21")
-    
-
-]  #  à remplir
+]  #  à remplir 
 edges_flag_out_cc_mb = [
-(1,2), (2,5), (5,11), (24,6), (6,3), (3,4), (8,25), (32,9), (38,10)     
+(1,2), (2,5), (5,11), (24,6), (6,3), (3,4), (8,25), (32,9), (38,10),
+## edge interne 
+(32,34) ## "e15" -> "a17"     
 ]   #  à remplir
 
 circuit_test_pin_clock = [
@@ -453,8 +453,9 @@ def is_pin_out_co(g : nx.Graph):
         # liste de comprehension 
         result_1 = [one_result for one_result in result if len(one_result) == one_pin_out.nb_in] ## edge interne
         result_2.append(result_1) 
-#        if (len(pin_out_co_1)) == one_pin_out.nb_in: ## pin en co
+#       if (len(pin_out_co_1)) == one_pin_out.nb_in: ## pin en co
         pin_out_co_1.extend(result_2)
+        result_2.clear()
 
     return pin_out_co_1
 
